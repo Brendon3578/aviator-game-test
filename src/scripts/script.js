@@ -37,3 +37,29 @@ LAST_ROUNDS_ARRAY.forEach((round) => {
     </span>
   </li>`;
 });
+
+// script do game action - buttons de apostar
+const numberInputBetEl = document.getElementById("bet-value");
+const updateBetButtons = document.querySelectorAll(
+  "button[data-button-update-bet]"
+);
+updateBetButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    let valueToAdd = button.dataset.buttonUpdateBet;
+    console.log(valueToAdd);
+    updateBetValue(valueToAdd);
+  });
+});
+
+function updateBetValue(valueToAd) {
+  let newValue = parseFloat(numberInputBetEl.value) + parseInt(valueToAd);
+  if (isNaN(newValue)) {
+    numberInputBetEl.value = "0";
+  } else {
+    if (newValue < 0.01) {
+      numberInputBetEl.value = "1";
+    } else {
+      numberInputBetEl.value = newValue;
+    }
+  }
+}
