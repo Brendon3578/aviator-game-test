@@ -46,11 +46,27 @@
       <main class="w-full flex items-center justify-center">
         <!-- div container -->
         <div
-          class="max-w-3xl flex flex-col w-full items-center justify-center p-2 gap-2"
+          class="max-w-4xl flex flex-col w-full items-center justify-center p-2 gap-3"
         >
           <!-- partidas anteriores -->
-          <div>
-            <ul id="last-rounds-list" class="flex items-center gap-1"></ul>
+          <div class="flex items-center gap-2 w-full">
+            <ul
+              id="last-rounds-list"
+              class="flex items-center justify-around w-full"
+            ></ul>
+            <span
+              class="flex items-center justify-center gap-1 py-0.5 px-2 rounded-full text-xs text-gray-500 bg-gray-800 border border-gray-700"
+            >
+              <!-- prettier-ignore -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clip-rule="evenodd" />
+              </svg>
+
+              <!-- prettier-ignore -->
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+              </svg>
+            </span>
           </div>
           <!-- game interface -->
           <div
@@ -59,104 +75,231 @@
             <img src="./assets/game.png" alt="jogasso" srcset="" />
           </div>
           <!-- game actions -->
-          <div
-            class="py-2 px-4 flex flex-col gap-2 justify-center items-center w-full text-white bg-gray-800 border border-gray-700 rounded-xl"
-          >
+          <section class="flex gap-8 w-full">
+            <!-- first bet button -->
             <div
-              class="text-xs bg-gray-900 border border-gray-700 rounded-full w-min flex"
+              class="p-4 flex flex-col gap-4 justify-center items-center w-full text-white bg-gray-800 border border-gray-700 rounded-xl"
             >
-              <label
-                class="rounded-full py-0.5 px-8 has-[:checked]:bg-gray-700 cursor-pointer"
+              <div
+                class="text-xs bg-gray-900 border border-gray-700 rounded-full w-min flex"
               >
-                <span class="w-8 flex place-content-center"> Bet </span>
-                <input
-                  type="radio"
-                  name="action-bet"
-                  id=""
-                  checked
-                  class="hidden"
-                />
-              </label>
-              <label
-                class="rounded-full py-0.5 px-8 has-[:checked]:bg-gray-700 cursor-pointer"
-              >
-                <span class="w-8 flex place-content-center"> Auto </span>
-
-                <input type="radio" name="action-bet" id="" class="hidden" />
-              </label>
-            </div>
-
-            <!-- bet button and counter -->
-            <div class="flex gap-8">
-              <div class="grid grid-cols-2 gap-1 w-40">
                 <label
-                  class="flex items-center justify-center w-full col-span-2 bg-gray-950 rounded-full border border-gray-700"
+                  class="rounded-full py-0.5 px-8 has-[:checked]:bg-gray-700 cursor-pointer"
                 >
+                  <span class="w-8 flex place-content-center"> Bet </span>
                   <input
-                    type="number"
-                    value="1.00"
-                    step=".01"
-                    min="0.01"
-                    name=""
-                    id="bet-value"
-                    class="pl-2 w-full flex text-center text-lg bg-transparent border-none outline-none appearance-none"
+                    type="radio"
+                    name="action-bet-1"
+                    id=""
+                    checked
+                    class="hidden"
                   />
-                  <div class="flex gap-1 px-2">
-                    <button
-                      data-button-update-bet="1"
-                      id="plus-one-btn"
-                      class="flex items-center justify-center bg-gray-500 text-gray-800 rounded-full hover:brightness-125 hover:scale-105"
-                    >
-                      <!-- ícone de mais -->
-                      <!-- prettier-ignore -->
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-                      <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
-                    </svg>
-                    </button>
-                    <button
-                      data-button-update-bet="-1"
-                      class="flex items-center justify-center bg-gray-500 text-gray-800 rounded-full hover:brightness-125 hover:scale-105"
-                    >
-                      <!-- ícone de menos -->
-                      <!-- prettier-ignore -->
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-                      <path d="M3.75 7.25a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z" />
-                    </svg>
-                    </button>
-                  </div>
                 </label>
-                <button
-                  data-button-update-bet="5"
-                  class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
+                <label
+                  class="rounded-full py-0.5 px-8 has-[:checked]:bg-gray-700 cursor-pointer"
                 >
-                  5
-                </button>
+                  <span class="w-8 flex place-content-center"> Auto </span>
+
+                  <input
+                    type="radio"
+                    name="action-bet-1"
+                    id=""
+                    class="hidden"
+                  />
+                </label>
+              </div>
+
+              <!-- bet button and counter -->
+              <div class="flex gap-8">
+                <div class="grid grid-cols-2 gap-1 w-40">
+                  <label
+                    class="flex items-center justify-center w-full col-span-2 bg-gray-950 rounded-full border border-gray-700"
+                  >
+                    <input
+                      type="number"
+                      value="1.00"
+                      step=".01"
+                      min="0.01"
+                      name=""
+                      id="bet-value-1"
+                      class="pl-2 w-full flex text-center text-lg bg-transparent border-none outline-none appearance-none"
+                    />
+                    <div class="flex gap-1 px-2">
+                      <button
+                        data-button-update-bet="1"
+                        data-bet-value-input="1"
+                        id="plus-one-btn"
+                        class="flex items-center justify-center bg-gray-500 text-gray-800 rounded-full hover:brightness-125 hover:scale-105"
+                      >
+                        <!-- ícone de mais -->
+                        <!-- prettier-ignore -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                        <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+                      </svg>
+                      </button>
+                      <button
+                        data-button-update-bet="-1"
+                        data-bet-value-input="1"
+                        class="flex items-center justify-center bg-gray-500 text-gray-800 rounded-full hover:brightness-125 hover:scale-105"
+                      >
+                        <!-- ícone de menos -->
+                        <!-- prettier-ignore -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                        <path d="M3.75 7.25a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z" />
+                      </svg>
+                      </button>
+                    </div>
+                  </label>
+                  <button
+                    data-button-update-bet="5"
+                    data-bet-value-input="1"
+                    class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
+                  >
+                    5
+                  </button>
+                  <button
+                    data-button-update-bet="10"
+                    data-bet-value-input="1"
+                    class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
+                  >
+                    10
+                  </button>
+                  <button
+                    data-button-update-bet="20"
+                    data-bet-value-input="1"
+                    class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
+                  >
+                    20
+                  </button>
+                  <button
+                    data-button-update-bet="100"
+                    data-bet-value-input="1"
+                    class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
+                  >
+                    100
+                  </button>
+                </div>
                 <button
-                  data-button-update-bet="10"
-                  class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
+                  bet-button-2
+                  class="button-85 min-h-fit w-40 rounded-3xl flex items-center justify-center text-3xl"
                 >
-                  10
-                </button>
-                <button
-                  data-button-update-bet="20"
-                  class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
-                >
-                  20
-                </button>
-                <button
-                  data-button-update-bet="100"
-                  class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
-                >
-                  100
+                  Bet
                 </button>
               </div>
-              <button
-                class="button-85 min-h-fit w-40 rounded-3xl flex items-center justify-center text-3xl"
-              >
-                Bet
-              </button>
             </div>
-          </div>
+
+            <!-- second bet button -->
+            <div
+              class="p-4 flex flex-col gap-4 justify-center items-center w-full text-white bg-gray-800 border border-gray-700 rounded-xl"
+            >
+              <div
+                class="text-xs bg-gray-900 border border-gray-700 rounded-full w-min flex"
+              >
+                <label
+                  class="rounded-full py-0.5 px-8 has-[:checked]:bg-gray-700 cursor-pointer"
+                >
+                  <span class="w-8 flex place-content-center"> Bet </span>
+                  <input
+                    type="radio"
+                    name="action-bet-2"
+                    id=""
+                    checked
+                    class="hidden"
+                  />
+                </label>
+                <label
+                  class="rounded-full py-0.5 px-8 has-[:checked]:bg-gray-700 cursor-pointer"
+                >
+                  <span class="w-8 flex place-content-center"> Auto </span>
+
+                  <input
+                    type="radio"
+                    name="action-bet-2"
+                    id=""
+                    class="hidden"
+                  />
+                </label>
+              </div>
+
+              <!-- bet button and counter -->
+              <div class="flex gap-8">
+                <div class="grid grid-cols-2 gap-1 w-40">
+                  <label
+                    class="flex items-center justify-center w-full col-span-2 bg-gray-950 rounded-full border border-gray-700"
+                  >
+                    <input
+                      type="number"
+                      value="1.00"
+                      step=".01"
+                      min="0.01"
+                      name=""
+                      id="bet-value-2"
+                      class="pl-2 w-full flex text-center text-lg bg-transparent border-none outline-none appearance-none"
+                    />
+                    <div class="flex gap-1 px-2">
+                      <button
+                        data-button-update-bet="1"
+                        data-bet-value-input="2"
+                        id="plus-one-btn"
+                        class="flex items-center justify-center bg-gray-500 text-gray-800 rounded-full hover:brightness-125 hover:scale-105"
+                      >
+                        <!-- ícone de mais -->
+                        <!-- prettier-ignore -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+                    </svg>
+                      </button>
+                      <button
+                        data-button-update-bet="-1"
+                        data-bet-value-input="2"
+                        class="flex items-center justify-center bg-gray-500 text-gray-800 rounded-full hover:brightness-125 hover:scale-105"
+                      >
+                        <!-- ícone de menos -->
+                        <!-- prettier-ignore -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                      <path d="M3.75 7.25a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z" />
+                    </svg>
+                      </button>
+                    </div>
+                  </label>
+                  <button
+                    data-button-update-bet="5"
+                    data-bet-value-input="2"
+                    class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
+                  >
+                    5
+                  </button>
+                  <button
+                    data-button-update-bet="10"
+                    data-bet-value-input="2"
+                    class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
+                  >
+                    10
+                  </button>
+                  <button
+                    data-button-update-bet="20"
+                    data-bet-value-input="2"
+                    class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
+                  >
+                    20
+                  </button>
+                  <button
+                    data-button-update-bet="100"
+                    data-bet-value-input="2"
+                    class="flex place-content-center text-xs rounded-full bg-gray-700 border border-gray-600 p-0.5"
+                  >
+                    100
+                  </button>
+                </div>
+                <button
+                  id="bet-button-2"
+                  class="button-85 min-h-fit w-40 rounded-3xl flex items-center justify-center text-3xl"
+                >
+                  Bet
+                </button>
+              </div>
+            </div>
+          </section>
         </div>
       </main>
     </div>

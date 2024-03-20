@@ -1,15 +1,38 @@
+const weekdayNames = [
+  "Domingo",
+  "Segunda",
+  "Terça",
+  "Quarta",
+  "Quinta",
+  "Sexta",
+  "Sábado",
+];
+const monthNames = [
+  "Jan",
+  "Fev",
+  "Mar",
+  "Abr",
+  "Mai",
+  "Jun",
+  "Jul",
+  "Ago",
+  "Set",
+  "Out",
+  "Nov",
+  "Dez",
+];
+
 /**
- * @param {Date} data
+ * @param {Date} date
  */
-function dataAtualFormatada(data) {
-  let dia = data.getDate().toString();
-  let diaF = dia.length == 1 ? "0" + dia : dia;
-  let mes = (data.getMonth() + 1).toString(); //+1 pois no getMonth Janeiro começa com zero.
-  let mesF = mes.length == 1 ? "0" + mes : mes;
-  let anoF = data.getFullYear();
-  let hora = data.getHours();
-  let minuto = data.getMinutes();
-  return `${diaF}/${mesF}/${anoF} - ${hora}:${minuto}`;
+function dataAtualFormatada(date) {
+  let dateString = `${weekdayNames[date.getDay()]} ${date.getHours()}:${(
+    "00" + date.getMinutes()
+  ).slice(-2)} ${date.getDate()} ${
+    monthNames[date.getMonth()]
+  } ${date.getFullYear()}`;
+
+  return dateString;
 }
 
 export { dataAtualFormatada };

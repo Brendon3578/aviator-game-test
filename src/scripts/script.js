@@ -29,8 +29,8 @@ for (let i = 0; i < 12; i++) {
 LAST_ROUNDS_ARRAY.forEach((round) => {
   lastRoundsListEl.innerHTML += `<li>
     <span
-      style="background-color: ${round.background_color};"
-      class="py-0.5 px-2 rounded-full text-xs text-white"
+      style="background-color: ${round.background_color}; border-color: ${round.background_color};"
+      class="py-0.5 px-2 rounded-full text-xs text-white border"
       title="partida ocorreu em ${round.timestamp}"
     >
       ${round.value}
@@ -39,27 +39,38 @@ LAST_ROUNDS_ARRAY.forEach((round) => {
 });
 
 // script do game action - buttons de apostar
-const numberInputBetEl = document.getElementById("bet-value");
+const firstNumberInputBetEl = document.getElementById("bet-value-1");
+const secondNumberInputBetEl = document.getElementById("bet-value-2");
 const updateBetButtons = document.querySelectorAll(
   "button[data-button-update-bet]"
 );
 updateBetButtons.forEach((button) => {
   button.addEventListener("click", () => {
     let valueToAdd = button.dataset.buttonUpdateBet;
+    let betInputToAdd = button.dataset.betValueInput;
+    console.log(betInputToAdd);
+
     console.log(valueToAdd);
-    updateBetValue(valueToAdd);
+
+    if (betInputToAdd == "1") {
+      updateBetValue(valueToAdd, firstNumberInputBetEl);
+    } else if (betInputToAdd == "2") {
+      updateBetValue(valueToAdd, secondNumberInputBetEl);
+    } else {
+      throw new Error(`dataset attribute not defined on button`);
+    }
   });
 });
 
-function updateBetValue(valueToAd) {
-  let newValue = parseFloat(numberInputBetEl.value) + parseInt(valueToAd);
+function updateBetValue(valueToAdd, inputBetEl) {
+  let newValue = parseFloat(inputBetEl.value) + parseInt(valueToAdd);
   if (isNaN(newValue)) {
-    numberInputBetEl.value = "0";
+    inputBetEl.value = "0";
   } else {
     if (newValue < 0.01) {
-      numberInputBetEl.value = "1";
+      inputBetEl.value = "1";
     } else {
-      numberInputBetEl.value = newValue;
+      inputBetEl.value = newValue;
     }
   }
 }
