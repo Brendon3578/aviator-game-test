@@ -1,3 +1,5 @@
+import { getRandomInt } from "./utils.js";
+
 // source: https://canvasjs.com/forums/topic/can-you-provide-me-like-aviator-game-chart/
 let dps = [];
 let updateInterval = 125;
@@ -62,14 +64,15 @@ chart.render();
 let xVal = 0;
 let yVal = 0;
 
-let updateChart = function () {
-  yVal = xVal ** 2;
+function updateChart() {
+  yVal = Math.log(xVal + 3); // gráfico de log10()
+  // yVal = xVal ** 2; // gráfico exponencial
   dps.push({ x: xVal, y: yVal });
   xVal++;
   chart.render();
   chart.axisY[0].set("maximum", yVal + 1);
   positionMarkerImage(imageMarker, chart.options.data[0].dataPoints.length - 1);
-};
+}
 
 let imageMarkerAviator = document.getElementById("aviator");
 
@@ -99,19 +102,24 @@ function positionMarkerImage(imageMarker, index) {
 
 let count = 1;
 
-let updateTextId = setInterval(() => {
-  count += 0.1;
-}, 100);
-
 let updateId = setInterval(() => {
-  chart.title.set("text", `${Math.floor(count).toFixed(2)}x`);
+  count += getRandomInt(0.05);
+  chart.title.set("text", `${count.toFixed(2)}x`);
   updateChart();
 }, updateInterval);
 
+// máximo de segundos que a partia irá acontecer
+const ONE_SECOND = 1000;
+const roundDuration = getRandomInt(20) * ONE_SECOND;
+console.log(
+  `Essa partida acontecera durante ${(roundDuration / 1000).toFixed(
+    2
+  )} segundos.`
+);
+
 setTimeout(() => {
   clearInterval(updateId);
-  clearInterval(updateTextId);
-}, 10000);
+}, roundDuration); // ou definir como 10000 -> 10 segundos
 
 window.addEventListener("resize", () => {
   positionMarkerImage(imageMarker, chart.options.data[0].dataPoints.length - 1);

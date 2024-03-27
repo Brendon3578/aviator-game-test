@@ -1,11 +1,6 @@
-import { dataAtualFormatada } from "./utils.js";
+import { dataAtualFormatada, getRandomInt } from "./utils.js";
 
 // ------------------------------------[ SCRIPT QUE GERA VALORES ALEATÓRIOS DAS ÚLTIMAS PARTIDAS - EM CIMA DO GRÁFICO DO AVIÃO ]------------------------------------
-
-function getRandomInt(max) {
-  const randomNumber = Math.random() * max;
-  return Math.round((randomNumber + Number.EPSILON) * 100) / 100;
-}
 
 function getLastRoundBackgroundColor(number) {
   let hue = 200 + number;
@@ -36,7 +31,7 @@ LAST_ROUNDS_ARRAY.forEach((round) => {
     <span
       style="background-color: ${round.background_color}; border-color: ${round.background_color};"
       class="py-0.5 px-2 rounded-full text-xs text-white border"
-      title="partida ocorreu em ${round.timestamp}"
+      title="Essa partida ocorreu em ${round.timestamp}"
     >
       ${round.value}
     </span>

@@ -35,4 +35,9 @@ function dataAtualFormatada(date) {
   return date.toLocaleString("pt-BR", { timezone: "UTC" });
 }
 
-export { dataAtualFormatada };
+function getRandomInt(max) {
+  const randomNumber = Math.random() * max;
+  return Math.round((randomNumber + Number.EPSILON) * 100) / 100;
+}
+
+export { dataAtualFormatada, getRandomInt };

@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./styles/output.css" />
+    <link rel="stylesheet" href="./styles/scroll.css" />
 
     <!-- CDN do CanvaJS -->
     <!-- <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script> -->
@@ -57,7 +58,7 @@
           <div class="flex items-center gap-2 w-full">
             <ul
               id="last-rounds-list"
-              class="flex items-center justify-between w-full"
+              class="py-1 overflow-x-auto gap-1 flex items-center justify-between w-full"
             ></ul>
             <span
               class="flex items-center justify-center gap-1 py-0.5 px-2 rounded-full text-xs text-gray-500 bg-gray-800 border border-gray-700"
@@ -75,7 +76,7 @@
           </div>
           <!-- game interface -->
           <div
-            class="overflow-hidden bg-gray-950 border-gray-700 border rounded-3xl p-2 min-h-96 w-full text-white flex items-center justify-center flex-col gap-2"
+            class="overflow-hidden bg-gray-950 border-gray-700 border rounded-3xl py-4 p-8 min-h-96 w-full text-white flex items-center justify-center flex-col gap-2"
           >
             <!-- BIBLIOTECA DO CANVAS JS -->
             <div
@@ -86,7 +87,7 @@
             <!-- <img src="./assets/game.png" alt="jogasso" srcset="" /> -->
           </div>
           <!-- game actions -->
-          <form class="flex gap-8 w-full">
+          <form class="flex flex-col lg:flex-row gap-8 w-full">
             <!-- first bet button -->
             <!-- data-bet-status can be 'bet' 'cancel' or 'cash-out' -->
             <fieldset
