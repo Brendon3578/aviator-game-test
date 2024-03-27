@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./styles/output.css" />
+
+    <!-- CDN do CanvaJS -->
+    <!-- <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script> -->
+
+    <!-- CDN do Tailwind -->
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -70,9 +75,15 @@
           </div>
           <!-- game interface -->
           <div
-            class="bg-gray-950 border-gray-700 border rounded-3xl p-2 min-h-96 w-full text-white flex items-center justify-center flex-col gap-2"
+            class="overflow-hidden bg-gray-950 border-gray-700 border rounded-3xl p-2 min-h-96 w-full text-white flex items-center justify-center flex-col gap-2"
           >
-            <img src="./assets/game.png" alt="jogasso" srcset="" />
+            <!-- BIBLIOTECA DO CANVAS JS -->
+            <div
+              class="relative"
+              id="chartContainer"
+              style="height: 360px; width: 100%"
+            ></div>
+            <!-- <img src="./assets/game.png" alt="jogasso" srcset="" /> -->
           </div>
           <!-- game actions -->
           <form class="flex gap-8 w-full">
@@ -343,5 +354,10 @@
       </main>
     </div>
   </body>
+  <script
+    type="module"
+    src="./scripts/lib/canvasjs-chart-3.7.45/canvasjs.min.js"
+  ></script>
   <script type="module" src="./scripts/script.js"></script>
+  <script type="module" src="./scripts/chart.js"></script>
 </html>

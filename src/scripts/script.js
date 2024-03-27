@@ -1,5 +1,7 @@
 import { dataAtualFormatada } from "./utils.js";
 
+// ------------------------------------[ SCRIPT QUE GERA VALORES ALEATÓRIOS DAS ÚLTIMAS PARTIDAS - EM CIMA DO GRÁFICO DO AVIÃO ]------------------------------------
+
 function getRandomInt(max) {
   const randomNumber = Math.random() * max;
   return Math.round((randomNumber + Number.EPSILON) * 100) / 100;
@@ -16,8 +18,11 @@ const LAST_ROUNDS_ARRAY = [];
 
 for (let i = 0; i < 12; i++) {
   let randomValue = getRandomInt(15);
+  if (getRandomInt(10) > 9.9) {
+    randomValue = getRandomInt(300);
+  }
 
-  console.log(randomValue);
+  //console.log(randomValue);
 
   LAST_ROUNDS_ARRAY.push({
     value: `${randomValue}x`,
@@ -37,6 +42,8 @@ LAST_ROUNDS_ARRAY.forEach((round) => {
     </span>
   </li>`;
 });
+
+// ------------------------------------[ SCRIPT DOS BOTÕES DE ADICIONAR MAIS DINHEIRO NO INPUT ]------------------------------------
 
 // script do game action - buttons de apostar
 const firstNumberBetInput = document.getElementById("bet-value-1");
@@ -75,7 +82,7 @@ function updateBetValue(valueToAdd, inputBetEl) {
   }
 }
 
-// ----------------- Bet Button Script
+// ------------------------------------[ SCRIPT DOS BOTÕES DE APOSTA ]------------------------------------
 const secondBetButton = document.getElementById("bet-button-2");
 const firstBetFieldset = document.getElementById("bet-fieldset-1");
 const secondBetFieldset = document.getElementById("bet-fieldset-2");

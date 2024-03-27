@@ -26,13 +26,13 @@ const monthNames = [
  * @param {Date} date
  */
 function dataAtualFormatada(date) {
-  let dateString = `${weekdayNames[date.getDay()]} ${date.getHours()}:${(
-    "00" + date.getMinutes()
-  ).slice(-2)} ${date.getDate()} ${
-    monthNames[date.getMonth()]
-  } ${date.getFullYear()}`;
+  // let dateString = `${weekdayNames[date.getDay()]} ${date.getHours()}:${(
+  //   "00" + date.getMinutes()
+  // ).slice(-2)} ${date.getDate()} ${
+  //   monthNames[date.getMonth()]
+  // } ${date.getFullYear()}`;
 
-  return dateString;
+  return date.toLocaleString("pt-BR", { timezone: "UTC" });
 }
 
 export { dataAtualFormatada };
