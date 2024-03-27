@@ -39,8 +39,8 @@ LAST_ROUNDS_ARRAY.forEach((round) => {
 });
 
 // script do game action - buttons de apostar
-const firstNumberInputBetEl = document.getElementById("bet-value-1");
-const secondNumberInputBetEl = document.getElementById("bet-value-2");
+const firstNumberBetInput = document.getElementById("bet-value-1");
+const secondNumberBetInput = document.getElementById("bet-value-2");
 const updateBetButtons = document.querySelectorAll(
   "button[data-button-update-bet]"
 );
@@ -53,9 +53,9 @@ updateBetButtons.forEach((button) => {
     console.log(valueToAdd);
 
     if (betInputToAdd == "1") {
-      updateBetValue(valueToAdd, firstNumberInputBetEl);
+      updateBetValue(valueToAdd, firstNumberBetInput);
     } else if (betInputToAdd == "2") {
-      updateBetValue(valueToAdd, secondNumberInputBetEl);
+      updateBetValue(valueToAdd, secondNumberBetInput);
     } else {
       throw new Error(`dataset attribute not defined on button`);
     }
@@ -73,4 +73,72 @@ function updateBetValue(valueToAdd, inputBetEl) {
       inputBetEl.value = newValue;
     }
   }
+}
+
+// ----------------- Bet Button Script
+const secondBetButton = document.getElementById("bet-button-2");
+const firstBetFieldset = document.getElementById("bet-fieldset-1");
+const secondBetFieldset = document.getElementById("bet-fieldset-2");
+
+const betButtons = document.querySelectorAll("[data-bet-button]");
+
+betButtons.forEach((button) => {
+  const betButtonNumber = button.dataset.betButton;
+  const betButtonValueText = button.querySelector("[data-bet-value]");
+  const buttonText = button.querySelector("[data-bet-button-text]");
+  const selectedFieldset = document.getElementById(
+    `bet-fieldset-${betButtonNumber}`
+  );
+  let betStatus = "";
+
+  // verificar se o atributo data-bet-button está definido dentro do button
+  if (!betButtonNumber)
+    throw new Error("button dataset attribute don't defined!");
+  // verificar se os elementos dentro do button existem
+  if (!betButtonValueText || !buttonText)
+    throw new Error("button's elements not defined correctly!");
+  // verificar se o fieldset existe no HTML
+  if (!selectedFieldset) throw new Error("fieldset don't exists!");
+
+  button.addEventListener("click", () => {
+    // variável que pega o valor definido no atributo data-bet-button -> se é o primeiro ou segundo
+    betStatus = selectedFieldset.dataset.betStatus;
+    if (!betStatus) throw new Error("fieldset status don't defined!");
+    if (!isBetStatusValid(betStatus))
+      throw new Error("Not a valid fieldset status!");
+
+    switch (betStatus) {
+      case "bet":
+        changeBetFieldsetStatus(selectedFieldset, "cancel");
+        selectedFieldset.setAttribute("disabled", "");
+        // setBetButtonDisabled(button, true);
+        buttonText.textContent = "Cancel";
+        break;
+      case "cancel":
+        changeBetFieldsetStatus(selectedFieldset, "bet");
+        selectedFieldset.removeAttribute("disabled");
+        buttonText.textContent = "Bet";
+        break;
+      case "cash-out":
+        break;
+
+      default:
+        break;
+    }
+  });
+});
+
+const VALID_BET_STATUS = ["bet", "cancel", "cash-out"];
+function isBetStatusValid(betStatus) {
+  return VALID_BET_STATUS.includes(betStatus);
+}
+
+function changeBetFieldsetStatus(fieldsetElement, newStatus) {
+  if (!isBetStatusValid(newStatus))
+    throw new Error("Not a valid bet status to change fieldset!");
+  fieldsetElement.dataset.betStatus = newStatus;
+}
+
+function setBetButtonDisabled(betButtonElement, boolean) {
+  betButtonElement.dataset.buttonDisabled = boolean;
 }
