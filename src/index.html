@@ -42,10 +42,12 @@
           </button>
           <!-- Saldo do usuário -->
           <div
-            class="py-0.5 px-4 bg-slate-900 border-slate-700 border rounded-full text-white"
+            class="flex gap-2 items-center justify-center py-0.5 px-3 bg-slate-900 border-slate-700 border rounded-full text-white"
           >
-            <span>R$</span>
-            <span>Saldo</span>
+            <span
+              ><img src="./assets/coin.svg" alt="fatecoins" class="w-6 h-6"
+            /></span>
+            <span id="player-money">0.00</span>
           </div>
         </div>
       </header>
@@ -361,4 +363,5 @@
   ></script>
   <script type="module" src="./scripts/script.js"></script>
   <script type="module" src="./scripts/chart.js"></script>
+  <script type="module" src="./scripts/player.js"></script>
 </html>

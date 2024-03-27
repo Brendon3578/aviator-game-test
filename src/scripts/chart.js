@@ -6,13 +6,16 @@ let updateInterval = 125;
 
 let chart = new CanvasJS.Chart("chartContainer", {
   title: {
-    text: "4.03x",
+    text: "1.00x",
     dockInsidePlotArea: true,
     verticalAlign: "center",
     fontSize: 100,
   },
   theme: "dark2",
   backgroundColor: "#030712", //gray 950
+  toolTip: {
+    enabled: false,
+  },
   axisX: {
     lineColor: "#4b5563", //gray 600
     labelFontColor: "#4b5563", //gray 600
@@ -48,35 +51,35 @@ let imageMarker = document.createElement("img");
 imageMarker.setAttribute("id", "aviator");
 imageMarker.setAttribute("src", chart.options.data[0].markerImageUrl);
 imageMarker.setAttribute("style", "display: none; height: 80px; width: 80px");
-// `<img id='aviator' src="${chart.options.data[0].markerImageUrl}" style="display: none; height: 20px; width: 20px" />`;
+
 document
   .querySelector("#chartContainer > .canvasjs-chart-container")
   .append(imageMarker);
-// $("<img>")
-//   .attr("src", chart.options.data[0].markerImageUrl)
-//   .css("display", "none")
-//   .css("height", 20)
-//   .css("width", 20)
-//   .appendTo($("#chartContainer>.canvasjs-chart-container"));
 
 chart.render();
 
 let xVal = 0;
 let yVal = 0;
 
+// let randomNumberToSumYAxis = getRandomInt(0.05);
+// console.log(`Número aleatório do cálculo: ${randomNumberToSumYAxis}`);
+
 function updateChart() {
-  yVal = Math.log(xVal + 3); // gráfico de log10()
+  // esse cálculo faz a impressão ddo avião cair
+  // yVal = Math.log(xVal + 1) + Math.sin(xVal * randomNumberToSumYAxis);
+  yVal = Math.log(xVal + 1); // gráfico de log10()
+  // yVal = betValue;
   // yVal = xVal ** 2; // gráfico exponencial
   dps.push({ x: xVal, y: yVal });
   xVal++;
   chart.render();
   chart.axisY[0].set("maximum", yVal + 1);
-  positionMarkerImage(imageMarker, chart.options.data[0].dataPoints.length - 1);
+  positionMarkerImage(chart.options.data[0].dataPoints.length - 1);
 }
 
 let imageMarkerAviator = document.getElementById("aviator");
 
-function positionMarkerImage(imageMarker, index) {
+function positionMarkerImage(index) {
   let pixelX = chart.axisX[0].convertValueToPixel(
     chart.options.data[0].dataPoints[index].x
   );
@@ -100,27 +103,42 @@ function positionMarkerImage(imageMarker, index) {
   // });
 }
 
-let count = 1;
+function startNewRound() {
+  imageMarkerAviator.style.display = "block";
+  let count = 1;
 
-let updateId = setInterval(() => {
-  count += getRandomInt(0.05);
-  chart.title.set("text", `${count.toFixed(2)}x`);
-  updateChart();
-}, updateInterval);
+  let updateId = setInterval(() => {
+    count += getRandomInt(0.05);
+    chart.title.set("text", `${count.toFixed(2)}x`);
+    updateChart();
+  }, updateInterval);
 
-// máximo de segundos que a partia irá acontecer
-const ONE_SECOND = 1000;
-const roundDuration = getRandomInt(20) * ONE_SECOND;
-console.log(
-  `Essa partida acontecera durante ${(roundDuration / 1000).toFixed(
-    2
-  )} segundos.`
-);
+  // máximo de segundos que a partia irá acontecer
+  const ONE_SECOND = 1000;
+  // const roundDuration = 60 * ONE_SECOND;
+  const roundDuration = getRandomInt(50) * ONE_SECOND;
+  console.log(
+    `Essa partida durará ${(roundDuration / 1000).toFixed(2)} segundos.`
+  );
 
-setTimeout(() => {
-  clearInterval(updateId);
-}, roundDuration); // ou definir como 10000 -> 10 segundos
+  setTimeout(() => {
+    clearInterval(updateId);
+  }, roundDuration); // ou definir como 10000 -> 10 segundos
 
-window.addEventListener("resize", () => {
-  positionMarkerImage(imageMarker, chart.options.data[0].dataPoints.length - 1);
-});
+  window.addEventListener("resize", () => {
+    positionMarkerImage(chart.options.data[0].dataPoints.length - 1);
+  });
+}
+
+function clearRound() {
+  dps = [];
+  imageMarkerAviator.style.display = "hidden";
+}
+
+// setTimeout(() => {
+// }, 0);
+startNewRound();
+
+// setTimeout(() => {
+//   clearRound();
+// }, 2000);
