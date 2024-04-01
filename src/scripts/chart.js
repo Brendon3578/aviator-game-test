@@ -104,10 +104,11 @@ function positionMarkerImage(index) {
 }
 
 function startNewRound() {
-  imageMarkerAviator.style.display = "block";
+  // imageMarkerAviator.style.display = "block";
+  imageMarkerAviator.classList.remove("fly-away");
   let count = 1;
 
-  let updateId = setInterval(() => {
+  const intervalId = setInterval(() => {
     count += getRandomInt(0.05);
     chart.title.set("text", `${count.toFixed(2)}x`);
     updateChart();
@@ -121,24 +122,32 @@ function startNewRound() {
     `Essa partida durará ${(roundDuration / 1000).toFixed(2)} segundos.`
   );
 
-  setTimeout(() => {
-    clearInterval(updateId);
+  const timeoutId = setTimeout(() => {
+    clearInterval(intervalId);
   }, roundDuration); // ou definir como 10000 -> 10 segundos
 
   window.addEventListener("resize", () => {
     positionMarkerImage(chart.options.data[0].dataPoints.length - 1);
   });
+
+  return { timeoutId: timeoutId, intervalId: intervalId };
 }
 
-function clearRound() {
+function clearRound(timeoutId, intervalId) {
+  // imageMarkerAviator.style.display = "none";
+  imageMarkerAviator.classList.add("fly-away");
+  imageMarkerAviator.style.top = "0px";
+  // console.log(window.screen.width);
+  imageMarkerAviator.style.left = `${window.screen.width}px`;
+  clearTimeout(timeoutId);
+  clearInterval(intervalId);
   dps = [];
-  imageMarkerAviator.style.display = "hidden";
 }
 
 // setTimeout(() => {
 // }, 0);
-startNewRound();
+let { timeoutId, intervalId } = startNewRound();
 
-// setTimeout(() => {
-//   clearRound();
-// }, 2000);
+setTimeout(() => {
+  clearRound(timeoutId, intervalId);
+}, 2000);

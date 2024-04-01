@@ -132,3 +132,12 @@ fieldset[data-bet-status="cash-out"] .button-bet:before {
 fieldset[data-bet-status="cash-out"] .cash-out-value-txt {
   @apply flex;
 }
+
+/* AVIATOR IMAGE STYLES */
+/* #aviator {
+  transition: 0.1s ease-in-out;
+} */
+
+#aviator.fly-away {
+  transition: 1s ease-in-out;
+}
