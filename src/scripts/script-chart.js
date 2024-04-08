@@ -69,11 +69,12 @@ function startNewRound() {
     chart.updateChart();
   }, updateIntervalTime);
 
+  // ou definir como 10000 -> 10 segundos
   const roundDuration = generateRoundDuration();
 
   const timeoutId = setTimeout(() => {
     clearInterval(intervalId);
-  }, roundDuration); // ou definir como 10000 -> 10 segundos
+  }, roundDuration);
 
   setTimeout(() => {
     // função que termina a partida e "limpa" os temporizadores
