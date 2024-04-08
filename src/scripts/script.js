@@ -1,4 +1,9 @@
-import { dataAtualFormatada, getRandomInt } from "./utils.js";
+import { Player } from "./player.js";
+import { dataAtualFormatada, getRandomInt, showAlert } from "./utils.js";
+
+// ------------------------------------[ SCRIPT DOS PLAYER ]------------------------------------
+const player = new Player(100);
+player.updateMoneyOnInterface();
 
 // ------------------------------------[ SCRIPT QUE GERA VALORES ALEATÓRIOS DAS ÚLTIMAS PARTIDAS - EM CIMA DO GRÁFICO DO AVIÃO ]------------------------------------
 
@@ -50,9 +55,8 @@ updateBetButtons.forEach((button) => {
   button.addEventListener("click", () => {
     let valueToAdd = button.dataset.buttonUpdateBet;
     let betInputToAdd = button.dataset.betValueInput;
-    console.log(betInputToAdd);
-
-    console.log(valueToAdd);
+    // console.log(betInputToAdd);
+    // console.log(valueToAdd);
 
     if (betInputToAdd == "1") {
       updateBetValue(valueToAdd, firstNumberBetInput);
@@ -78,11 +82,13 @@ function updateBetValue(valueToAdd, inputBetEl) {
 }
 
 // ------------------------------------[ SCRIPT DOS BOTÕES DE APOSTA ]------------------------------------
-const secondBetButton = document.getElementById("bet-button-2");
-const firstBetFieldset = document.getElementById("bet-fieldset-1");
-const secondBetFieldset = document.getElementById("bet-fieldset-2");
-
 const betButtons = document.querySelectorAll("[data-bet-button]");
+function getBetValue(selectedFieldset) {
+  let input = selectedFieldset.querySelector("[data-bet-value]");
+  let betValue = parseFloat(input.value).toFixed(2);
+  input.value = betValue;
+  return parseFloat(betValue);
+}
 
 betButtons.forEach((button) => {
   const betButtonNumber = button.dataset.betButton;
@@ -92,6 +98,7 @@ betButtons.forEach((button) => {
     `bet-fieldset-${betButtonNumber}`
   );
   let betStatus = "";
+  let bet = 0;
 
   // verificar se o atributo data-bet-button está definido dentro do button
   if (!betButtonNumber)
@@ -105,21 +112,34 @@ betButtons.forEach((button) => {
   button.addEventListener("click", () => {
     // variável que pega o valor definido no atributo data-bet-button -> se é o primeiro ou segundo
     betStatus = selectedFieldset.dataset.betStatus;
+    bet = getBetValue(selectedFieldset);
+    // let betValue = selectedFieldset.
+
     if (!betStatus) throw new Error("fieldset status don't defined!");
     if (!isBetStatusValid(betStatus))
       throw new Error("Not a valid fieldset status!");
-
     switch (betStatus) {
       case "bet":
-        changeBetFieldsetStatus(selectedFieldset, "cancel");
-        selectedFieldset.setAttribute("disabled", "");
-        // setBetButtonDisabled(button, true);
-        buttonText.textContent = "Cancel";
+        if (bet > player.getMoney()) {
+          // verificar se o player possui fatecoins suficientes
+          showAlert("Você não possui esse dinheiro!");
+        } else {
+          changeBetFieldsetStatus(selectedFieldset, "cancel");
+          selectedFieldset.setAttribute("disabled", "");
+          // setBetButtonDisabled(button, true);
+          buttonText.textContent = "Cancel";
+          player.setMoney(player.getMoney() - bet);
+          player.updateMoneyOnInterface();
+        }
+
         break;
       case "cancel":
         changeBetFieldsetStatus(selectedFieldset, "bet");
         selectedFieldset.removeAttribute("disabled");
         buttonText.textContent = "Bet";
+
+        player.setMoney(player.getMoney() + bet);
+        player.updateMoneyOnInterface();
         break;
       case "cash-out":
         break;

@@ -73,7 +73,9 @@ class Chart {
     // esse cálculo faz a impressão ddo avião cair
     // yVal = Math.log(xVal + 1) + Math.sin(xVal * randomNumberToSumYAxis);
     // yVal = Math.log(xVal + 1); // gráfico de log10()
+    // this.yVal = Math.sin(this.xVal) + this.xVal; // gráfico de ondulação + crescente
     this.yVal = this.xVal ** 2; // gráfico exponencial
+
     // console.log(yVal);
     this.dps.push({ x: this.xVal, y: this.yVal });
     this.xVal++;

@@ -1,13 +1,22 @@
-const playerMoneyTextEl = document.getElementById("player-money");
+class Player {
+  #money;
+  #playerMoneyTextEl = document.getElementById("player-money");
 
-function getPlayerMoney() {
-  return playerMoneyTextEl.innerText;
+  constructor(money) {
+    this.#money = money;
+  }
+
+  getMoney() {
+    return this.#money;
+  }
+
+  setMoney(newMoney) {
+    this.#money = newMoney;
+  }
+
+  updateMoneyOnInterface() {
+    this.#playerMoneyTextEl.innerText = this.getMoney().toFixed(2);
+  }
 }
 
-function setPlayerMoney(newMoney) {
-  playerMoneyTextEl.innerHTML = newMoney.toFixed(2);
-}
-
-const playerMoney = 100;
-
-setPlayerMoney(playerMoney);
+export { Player };

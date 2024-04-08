@@ -40,4 +40,8 @@ function getRandomInt(max) {
   return Math.round((randomNumber + Number.EPSILON) * 100) / 100;
 }
 
-export { dataAtualFormatada, getRandomInt };
+function showAlert(message, isError = false) {
+  window.alert(message);
+}
+
+export { dataAtualFormatada, getRandomInt, showAlert };
