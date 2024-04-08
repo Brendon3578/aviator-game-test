@@ -12,9 +12,9 @@ const lastRoundsListEl = document.getElementById("last-rounds-list");
 const LAST_ROUNDS_ARRAY = [];
 
 for (let i = 0; i < 12; i++) {
-  let randomValue = getRandomInt(15);
+  let randomValue = (getRandomInt(15) + 1).toFixed(2);
   if (getRandomInt(10) > 9.9) {
-    randomValue = getRandomInt(300);
+    randomValue = (getRandomInt(300) + 1).toFixed(2);
   }
 
   //console.log(randomValue);
