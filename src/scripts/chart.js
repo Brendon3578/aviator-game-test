@@ -2,7 +2,7 @@ import { getRandomInt } from "./utils.js";
 
 // source: https://canvasjs.com/forums/topic/can-you-provide-me-like-aviator-game-chart/
 let dps = [];
-let updateInterval = 125;
+let updateIntervalTime = 125;
 
 let chart = new CanvasJS.Chart("chartContainer", {
   title: {
@@ -41,7 +41,8 @@ let chart = new CanvasJS.Chart("chartContainer", {
       fillOpacity: 0.3,
       lineThickness: 4,
       type: "area",
-      markerImageUrl: "./assets/aviator.svg",
+      // markerImageUrl: "./assets/aviator.svg",
+      markerImageUrl: "./assets/aviator_icon.png",
       dataPoints: dps,
     },
   ],
@@ -50,7 +51,10 @@ let chart = new CanvasJS.Chart("chartContainer", {
 let imageMarker = document.createElement("img");
 imageMarker.setAttribute("id", "aviator");
 imageMarker.setAttribute("src", chart.options.data[0].markerImageUrl);
-imageMarker.setAttribute("style", "display: none; height: 80px; width: 80px");
+imageMarker.setAttribute(
+  "style",
+  "display: none; height: 80px; width: 80px; object-fit: contain;"
+);
 
 document
   .querySelector("#chartContainer > .canvasjs-chart-container")
@@ -67,9 +71,9 @@ let yVal = 0;
 function updateChart() {
   // esse cálculo faz a impressão ddo avião cair
   // yVal = Math.log(xVal + 1) + Math.sin(xVal * randomNumberToSumYAxis);
-  yVal = Math.log(xVal + 1); // gráfico de log10()
-  // yVal = betValue;
-  // yVal = xVal ** 2; // gráfico exponencial
+  // yVal = Math.log(xVal + 1); // gráfico de log10()
+  yVal = xVal ** 2; // gráfico exponencial
+  // console.log(yVal);
   dps.push({ x: xVal, y: yVal });
   xVal++;
   chart.render();
@@ -103,51 +107,87 @@ function positionMarkerImage(index) {
   // });
 }
 
-function startNewRound() {
-  // imageMarkerAviator.style.display = "block";
-  imageMarkerAviator.classList.remove("fly-away");
-  let count = 1;
+let isRoundFinished = false;
 
-  const intervalId = setInterval(() => {
-    count += getRandomInt(0.05);
-    chart.title.set("text", `${count.toFixed(2)}x`);
-    updateChart();
-  }, updateInterval);
-
-  // máximo de segundos que a partia irá acontecer
-  const ONE_SECOND = 1000;
-  // const roundDuration = 60 * ONE_SECOND;
-  const roundDuration = getRandomInt(50) * ONE_SECOND;
-  console.log(
-    `Essa partida durará ${(roundDuration / 1000).toFixed(2)} segundos.`
-  );
-
-  const timeoutId = setTimeout(() => {
-    clearInterval(intervalId);
-  }, roundDuration); // ou definir como 10000 -> 10 segundos
-
-  window.addEventListener("resize", () => {
-    positionMarkerImage(chart.options.data[0].dataPoints.length - 1);
-  });
-
-  return { timeoutId: timeoutId, intervalId: intervalId };
-}
-
-function clearRound(timeoutId, intervalId) {
+function finishRound(timeoutId, intervalId) {
   // imageMarkerAviator.style.display = "none";
   imageMarkerAviator.classList.add("fly-away");
   imageMarkerAviator.style.top = "0px";
   // console.log(window.screen.width);
   imageMarkerAviator.style.left = `${window.screen.width}px`;
+
+  // limpar os temporizadores
   clearTimeout(timeoutId);
   clearInterval(intervalId);
   dps = [];
+  isRoundFinished = true;
 }
 
-// setTimeout(() => {
-// }, 0);
-let { timeoutId, intervalId } = startNewRound();
+function generateRoundDuration() {
+  // máximo de segundos que a partida irá acontecer
+  const ONE_SECOND = 1000;
+
+  const probability = getRandomInt(1);
+  let gameDuration = 0;
+
+  if (probability < 0.6) {
+    // 60% da partida durar até 10 segundos
+    gameDuration = getRandomInt(10) * ONE_SECOND;
+    console.log(`60% de chance! - a partida pode durar até 10 segundos`);
+  } else if (probability < 0.9) {
+    // 30% da partida durar até 50 segundos
+    gameDuration = getRandomInt(50) * ONE_SECOND;
+    console.log(`30% de chance! - a partida pode durar até 50 segundos`);
+  } else {
+    // 10% da partida durar até 300 segundos
+    gameDuration = getRandomInt(300) * ONE_SECOND;
+    console.log(`10% de chance! - a partida pode durar até 300 segundos`);
+  }
+  console.log(
+    `Essa partida durará ${(gameDuration / 1000).toFixed(2)} segundos.`
+  );
+  return gameDuration;
+}
+
+function startNewRound() {
+  chart.title.set("fontSize", 100);
+  // imageMarkerAviator.style.display = "block";
+  imageMarkerAviator.classList.remove("fly-away");
+  let count = 1;
+
+  // esse algoritmo irá atualizar o gráfico constantemente
+  const intervalId = setInterval(() => {
+    count += getRandomInt(0.05);
+    chart.title.set("text", `${count.toFixed(2)}x`);
+    updateChart();
+  }, updateIntervalTime);
+
+  const roundDuration = generateRoundDuration();
+
+  const timeoutId = setTimeout(() => {
+    clearInterval(intervalId);
+  }, roundDuration); // ou definir como 10000 -> 10 segundos
+
+  // função que atualiza a localização do ícone do aviãozinho caso o usuário redimensione a tela
+  window.addEventListener("resize", () => {
+    if (isRoundFinished == false) {
+      positionMarkerImage(chart.options.data[0].dataPoints.length - 1);
+    }
+  });
+
+  setTimeout(() => {
+    // função que termina a partida e "limpa" os temporizadores
+    finishRound(timeoutId, intervalId);
+  }, roundDuration);
+}
+
+function loadingNewRound() {
+  chart.title.set("text", "A partida começará em instantes!");
+  chart.title.set("fontSize", 32);
+}
+
+loadingNewRound();
 
 setTimeout(() => {
-  clearRound(timeoutId, intervalId);
+  startNewRound();
 }, 2000);
