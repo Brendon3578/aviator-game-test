@@ -1,9 +1,20 @@
+import { Chart } from "./chart.js";
+import { Game } from "./game.js";
 import { Player } from "./player.js";
+import { Round } from "./round.js";
 import { dataAtualFormatada, getRandomInt, showAlert } from "./utils.js";
 
 // ------------------------------------[ SCRIPT DOS PLAYER ]------------------------------------
-const player = new Player(100);
-player.updateMoneyOnInterface();
+const player = new Player();
+const chart = new Chart();
+const round = new Round(chart);
+
+const game = new Game(player, round, chart);
+game.init();
+
+setTimeout(() => {
+  round.startNewRound();
+}, 2000);
 
 // ------------------------------------[ SCRIPT QUE GERA VALORES ALEATÓRIOS DAS ÚLTIMAS PARTIDAS - EM CIMA DO GRÁFICO DO AVIÃO ]------------------------------------
 

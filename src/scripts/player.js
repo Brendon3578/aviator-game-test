@@ -2,10 +2,6 @@ class Player {
   #money;
   #playerMoneyTextEl = document.getElementById("player-money");
 
-  constructor(money) {
-    this.#money = money;
-  }
-
   getMoney() {
     return this.#money;
   }
