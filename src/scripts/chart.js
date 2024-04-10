@@ -6,7 +6,7 @@ class Chart {
   xVal = 0;
   yVal = 0;
   imageMarker = document.createElement("img");
-  shouldUpdateMarkerPositionAfterResize = true;
+  shouldUpdateMarkerPositionAfterResize = false;
 
   constructor() {
     this.chartInterface = new CanvasJS.Chart(

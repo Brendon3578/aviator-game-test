@@ -12,6 +12,20 @@ export class Round {
    * @type HTMLElement
    */
   #imageMarkerAviatorEl;
+  #isGameStarted = false;
+  #multiplierCount = 1;
+
+  get isGameStarted() {
+    return this.#isGameStarted;
+  }
+
+  get multiplierCount() {
+    return this.#multiplierCount;
+  }
+
+  get intervalTime() {
+    return this.#updateChartIntervalTime;
+  }
 
   constructor(chart) {
     this.#chart = chart;
@@ -38,6 +52,7 @@ export class Round {
       gameDuration = getRandomInt(300) * ONE_SECOND;
       console.log(`10% de chance! - a partida pode durar até 300 segundos`);
     }
+    gameDuration = 10000;
     console.log(
       `Essa partida durará ${(gameDuration / 1000).toFixed(2)} segundos.`
     );
@@ -58,6 +73,7 @@ export class Round {
     clearInterval(intervalId);
     this.#chart.clearChartDps();
     this.#chart.shouldUpdateMarkerPositionAfterResize = false;
+    this.#isGameStarted = false;
   }
 
   loadingNewRound() {
@@ -67,6 +83,8 @@ export class Round {
   }
 
   startNewRound() {
+    this.#multiplierCount = 1;
+    this.#isGameStarted = true;
     this.#chart.setSubtitleText("");
     this.#chart.setTitleText("");
     this.#chart.setTitleFontSize(100);
@@ -75,12 +93,11 @@ export class Round {
 
     // this.#imageMarkerAviatorEl.style.display = "block";
     this.#imageMarkerAviatorEl.classList.remove("fly-away");
-    let count = 1;
 
     // esse algoritmo irá atualizar o gráfico constantemente
     const intervalId = setInterval(() => {
-      count += getRandomInt(0.05);
-      this.#chart.setTitleText(`${count.toFixed(2)}x`);
+      this.#multiplierCount += getRandomInt(0.05);
+      this.#chart.setTitleText(`${this.#multiplierCount.toFixed(2)}x`);
       this.#chart.updateChart();
     }, this.#updateChartIntervalTime);
 
@@ -95,5 +112,7 @@ export class Round {
       // função que termina a partida e "limpa" os temporizadores
       this.finishRound(timeoutId, intervalId);
     }, roundDuration);
+
+    return { roundDuration };
   }
 }

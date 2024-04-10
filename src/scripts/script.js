@@ -13,8 +13,32 @@ const game = new Game(player, round, chart);
 game.init();
 
 setTimeout(() => {
-  round.startNewRound();
-}, 2000);
+  const { roundDuration } = round.startNewRound();
+  player.playersBets.forEach((betObject) => {
+    const selectedFieldsetEl = document.getElementById(
+      `bet-fieldset-${betObject.index}`
+    );
+
+    const numberbuttonTextElEl = selectedFieldsetEl.querySelector(
+      "[data-bet-text-value]"
+    );
+
+    const updateFieldsetValueIntervalId = setInterval(() => {
+      numberbuttonTextElEl.textContent = `${round.multiplierCount.toFixed(2)}x`;
+    }, round.intervalTime);
+
+    setTimeout(() => {
+      clearInterval(updateFieldsetValueIntervalId);
+    }, roundDuration);
+
+    // TODO: fazer o jogador ganhar quando faz o cash out antes do avião voar e somar o o valor ganho do jogador
+    // TODO: fazer o jogador perder quando o avião voar e subtrair o valor ganho do jogador
+
+    console.log(betObject);
+
+    changeBetFieldsetStatus(selectedFieldsetEl, "cash-out");
+  });
+}, 5000);
 
 // ------------------------------------[ SCRIPT QUE GERA VALORES ALEATÓRIOS DAS ÚLTIMAS PARTIDAS - EM CIMA DO GRÁFICO DO AVIÃO ]------------------------------------
 
@@ -57,8 +81,6 @@ LAST_ROUNDS_ARRAY.forEach((round) => {
 // ------------------------------------[ SCRIPT DOS BOTÕES DE ADICIONAR MAIS DINHEIRO NO INPUT ]------------------------------------
 
 // script do game action - buttons de apostar
-const firstNumberBetInput = document.getElementById("bet-value-1");
-const secondNumberBetInput = document.getElementById("bet-value-2");
 const updateBetButtons = document.querySelectorAll(
   "button[data-button-update-bet]"
 );
@@ -66,36 +88,25 @@ updateBetButtons.forEach((button) => {
   button.addEventListener("click", () => {
     let valueToAdd = button.dataset.buttonUpdateBet;
     let betInputToAdd = button.dataset.betValueInput;
-    // console.log(betInputToAdd);
-    // console.log(valueToAdd);
+    let numberInputEl = document.getElementById(`bet-value-${betInputToAdd}`);
 
-    if (betInputToAdd == "1") {
-      updateBetValue(valueToAdd, firstNumberBetInput);
-    } else if (betInputToAdd == "2") {
-      updateBetValue(valueToAdd, secondNumberBetInput);
-    } else {
-      throw new Error(`dataset attribute not defined on button`);
-    }
+    updateBetValue(valueToAdd, numberInputEl);
   });
 });
 
 function updateBetValue(valueToAdd, inputBetEl) {
   let newValue = parseFloat(inputBetEl.value) + parseInt(valueToAdd);
-  if (isNaN(newValue)) {
-    inputBetEl.value = "0";
+  if (isNaN(newValue) || newValue < 0.01) {
+    inputBetEl.value = "1";
   } else {
-    if (newValue < 0.01) {
-      inputBetEl.value = "1";
-    } else {
-      inputBetEl.value = newValue;
-    }
+    inputBetEl.value = newValue;
   }
 }
 
 // ------------------------------------[ SCRIPT DOS BOTÕES DE APOSTA ]------------------------------------
 const betButtons = document.querySelectorAll("[data-bet-button]");
-function getBetValue(selectedFieldset) {
-  let input = selectedFieldset.querySelector("[data-bet-value]");
+function getBetValue(selectedFieldsetEl) {
+  let input = selectedFieldsetEl.querySelector("[data-bet-value]");
   let betValue = parseFloat(input.value).toFixed(2);
   input.value = betValue;
   return parseFloat(betValue);
@@ -103,9 +114,9 @@ function getBetValue(selectedFieldset) {
 
 betButtons.forEach((button) => {
   const betButtonNumber = button.dataset.betButton;
-  const betButtonValueText = button.querySelector("[data-bet-value]");
-  const buttonText = button.querySelector("[data-bet-button-text]");
-  const selectedFieldset = document.getElementById(
+  const betValueButtonTextEl = button.querySelector("[data-bet-text-value]");
+  const buttonTextEl = button.querySelector("[data-bet-button-text]");
+  const selectedFieldsetEl = document.getElementById(
     `bet-fieldset-${betButtonNumber}`
   );
   let betStatus = "";
@@ -115,16 +126,16 @@ betButtons.forEach((button) => {
   if (!betButtonNumber)
     throw new Error("button dataset attribute don't defined!");
   // verificar se os elementos dentro do button existem
-  if (!betButtonValueText || !buttonText)
+  if (!betValueButtonTextEl || !buttonTextEl)
     throw new Error("button's elements not defined correctly!");
   // verificar se o fieldset existe no HTML
-  if (!selectedFieldset) throw new Error("fieldset don't exists!");
+  if (!selectedFieldsetEl) throw new Error("fieldset don't exists!");
 
   button.addEventListener("click", () => {
     // variável que pega o valor definido no atributo data-bet-button -> se é o primeiro ou segundo
-    betStatus = selectedFieldset.dataset.betStatus;
-    bet = getBetValue(selectedFieldset);
-    // let betValue = selectedFieldset.
+    betStatus = selectedFieldsetEl.dataset.betStatus;
+    bet = getBetValue(selectedFieldsetEl);
+    // let betValue = selectedFieldsetEl.
 
     if (!betStatus) throw new Error("fieldset status don't defined!");
     if (!isBetStatusValid(betStatus))
@@ -135,19 +146,21 @@ betButtons.forEach((button) => {
           // verificar se o player possui fatecoins suficientes
           showAlert("Você não possui esse dinheiro!");
         } else {
-          changeBetFieldsetStatus(selectedFieldset, "cancel");
-          selectedFieldset.setAttribute("disabled", "");
-          // setBetButtonDisabled(button, true);
-          buttonText.textContent = "Cancel";
+          changeBetFieldsetStatus(selectedFieldsetEl, "cancel");
+          selectedFieldsetEl.setAttribute("disabled", "");
+          buttonTextEl.textContent = "Cancel";
+
+          player.setBetValue(betButtonNumber, bet);
           player.setMoney(player.getMoney() - bet);
           player.updateMoneyOnInterface();
         }
 
         break;
       case "cancel":
-        changeBetFieldsetStatus(selectedFieldset, "bet");
-        selectedFieldset.removeAttribute("disabled");
-        buttonText.textContent = "Bet";
+        player.cancelBet(betButtonNumber);
+        changeBetFieldsetStatus(selectedFieldsetEl, "bet");
+        selectedFieldsetEl.removeAttribute("disabled");
+        buttonTextEl.textContent = "Bet";
 
         player.setMoney(player.getMoney() + bet);
         player.updateMoneyOnInterface();
