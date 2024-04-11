@@ -23,7 +23,7 @@ export class Game {
     this.#chart = chart;
   }
 
-  init() {
+  build() {
     this.#chart.render();
     this.#round.loadingNewRound();
     this.#player.setMoney(100);

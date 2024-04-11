@@ -15,7 +15,7 @@ const chart = new Chart();
 const round = new Round(chart);
 
 const game = new Game(player, round, chart);
-game.init();
+game.build();
 
 // ------------------ [ COMEÇO DA PARTIDA ] ------------------
 setTimeout(() => {
@@ -33,15 +33,12 @@ setTimeout(() => {
   let allFieldsetEls = document.querySelectorAll("fieldset[data-bet-status]");
 
   // ----- Para cada aposta feita...
-  player.playersBets.forEach((betObject) => {
+  player.playersBets.forEach((bet) => {
     // Desabilitar todos os
     allFieldsetEls.forEach((fieldset) => {
       setFieldsetDisabled(fieldset, true);
     });
-    const bettedFieldsetEl = document.getElementById(
-      `bet-fieldset-${betObject.index}`
-    );
-
+    const bettedFieldsetEl = document.getElementById(`bet-fieldset-${bet.id}`);
     const numberButtonTextEl = bettedFieldsetEl.querySelector(
       "[data-bet-text-value]"
     );
@@ -68,11 +65,11 @@ setTimeout(() => {
       changeBetFieldsetStatus(fieldset, "bet");
       buttonTextEl.textContent = "Bet";
     });
+
+    // define todas as apostas que não foram tirada a tempo como pertidas
     player.loseBetsDone();
 
     let lostBets = player.getLostBets();
-
-    // resolver erro de lógica que diminui 4 vezes
     lostBets.forEach((lostBet) => {
       console.log("ELE TEM QUE PERDER!");
       let lostMoney = player.getBetValue(lostBet.index) * round.multiplierCount;
@@ -82,10 +79,6 @@ setTimeout(() => {
       showAlert(`Você perdeu ${lostMoney.toFixed(2)}!`);
     });
   }, roundDuration);
-
-  // TODO: fazer o jogador ganhar quando faz o cash out antes do avião voar e somar o o valor ganho do jogador
-
-  // TODO: fazer o jogador perder quando o avião voar e subtrair o valor ganho do jogador
 }, 5000);
 
 // ------------------------------------[ SCRIPT DOS BOTÕES DE ADICIONAR MAIS DINHEIRO NO INPUT ]------------------------------------
@@ -125,15 +118,13 @@ const betButtonsEls = document.querySelectorAll("[data-bet-button]");
 betButtonsEls.forEach((button) => {
   let betStatus = "";
   let bet = 0;
-  const betNumber = button.dataset.betButton;
+  const betId = button.dataset.betButton;
   const betValueButtonTextEl = button.querySelector("[data-bet-text-value]");
   const buttonTextEl = button.querySelector("[data-bet-button-text]");
-  const selectedFieldsetEl = document.getElementById(
-    `bet-fieldset-${betNumber}`
-  );
+  const selectedFieldsetEl = document.getElementById(`bet-fieldset-${betId}`);
 
   // verificar se o atributo data-bet-button está definido dentro do button
-  if (!betNumber) throw new Error("button dataset attribute don't defined!");
+  if (!betId) throw new Error("button dataset attribute don't defined!");
   // verificar se os elementos dentro do button existem
   if (!betValueButtonTextEl || !buttonTextEl)
     throw new Error("button's elements not defined correctly!");
@@ -155,7 +146,7 @@ betButtonsEls.forEach((button) => {
           // verificar se o player possui fatecoins suficientes
           showAlert("Você não possui esse dinheiro!");
         } else {
-          player.setBetValue(betNumber, bet);
+          player.setBetValue(betId, bet);
           player.loseMoney(bet);
 
           // mudança no HTML
@@ -166,7 +157,7 @@ betButtonsEls.forEach((button) => {
 
         break;
       case "cancel":
-        player.cancelBet(betNumber);
+        player.cancelBet(betId);
         player.winMoney(bet);
 
         // mudança no HTML
@@ -177,10 +168,11 @@ betButtonsEls.forEach((button) => {
         break;
       case "cash-out":
         if (round.isGameEnded == false) {
-          player.winBet(betNumber);
+          player.winBet(betId);
 
-          let winMoney = player.getBetValue(betNumber) * round.multiplierCount;
+          let winMoney = player.getBetValue(betId) * round.multiplierCount;
           player.winMoney(winMoney);
+
           showAlert(`Você ganhou ${winMoney.toFixed(2)}!`);
           console.log(`Você ganhou ${winMoney.toFixed(2)}!`);
 
@@ -193,6 +185,7 @@ betButtonsEls.forEach((button) => {
         break;
 
       default:
+        throw new Error(`Bet status: "${betStatus}" don't exists!`);
         break;
     }
   });
@@ -245,3 +238,8 @@ function setBetButtonDisabled(betButtonElement, boolean) {
     throw new Error("Not a valid boolean value to disable or enable button!");
   betButtonElement.dataset.buttonDisabled = boolean;
 }
+
+console.log(
+  "%cBrendon desenvolveu isso. ☕",
+  "color: #ED1836; font-size: 16px; padding: 8px 16px; background-color: #0f1923; border-radius: 8px; "
+);
