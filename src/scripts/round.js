@@ -13,10 +13,15 @@ export class Round {
    */
   #imageMarkerAviatorEl;
   #isGameStarted = false;
+  #isGameEnded = false;
   #multiplierCount = 1;
 
   get isGameStarted() {
     return this.#isGameStarted;
+  }
+
+  get isGameEnded() {
+    return this.#isGameEnded;
   }
 
   get multiplierCount() {
@@ -52,7 +57,7 @@ export class Round {
       gameDuration = getRandomInt(300) * ONE_SECOND;
       console.log(`10% de chance! - a partida pode durar até 300 segundos`);
     }
-    gameDuration = 10000;
+    // gameDuration = 10000;
     console.log(
       `Essa partida durará ${(gameDuration / 1000).toFixed(2)} segundos.`
     );
@@ -74,17 +79,19 @@ export class Round {
     this.#chart.clearChartDps();
     this.#chart.shouldUpdateMarkerPositionAfterResize = false;
     this.#isGameStarted = false;
+    this.#isGameEnded = true;
   }
 
   loadingNewRound() {
-    this.#chart.setSubtitleText("");
+    this.#chart.setSubtitleText("Faça sua aposta!");
     this.#chart.setTitleText("A partida começará em instantes!");
-    this.#chart.setTitleFontSize(32);
+    this.#chart.setTitleFontSize(40);
   }
 
   startNewRound() {
-    this.#multiplierCount = 1;
+    this.#isGameEnded = false;
     this.#isGameStarted = true;
+    this.#multiplierCount = 1;
     this.#chart.setSubtitleText("");
     this.#chart.setTitleText("");
     this.#chart.setTitleFontSize(100);
