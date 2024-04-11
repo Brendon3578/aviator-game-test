@@ -1,4 +1,4 @@
-import { buildChartConfiguration } from "./config/chart.config.js";
+import { buildChartConfiguration } from "../config/chart.config.js";
 
 class Chart {
   chartInterface;

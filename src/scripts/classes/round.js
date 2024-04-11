@@ -1,5 +1,5 @@
 import { Chart } from "./chart.js";
-import { getRandomInt } from "./utils.js";
+import { getRandomInt } from "../utils.js";
 
 export class Round {
   #updateChartIntervalTime = 125;

@@ -3,7 +3,7 @@
  * @param {Date} date - O objeto Date que representa a data.
  * @returns {string} Retorna a data atual formatada como uma string no formato local, com o fuso horário configurado para "pt-BR".
  */
-function dataAtualFormatada(date) {
+function formatDateToBrazilianFormat(date) {
   return date.toLocaleString("pt-BR", { timezone: "UTC" });
 }
 
@@ -48,7 +48,7 @@ function isBetStatusValid(betStatus) {
 }
 
 export {
-  dataAtualFormatada,
+  formatDateToBrazilianFormat,
   getRandomInt,
   showAlert,
   isBoolean,
