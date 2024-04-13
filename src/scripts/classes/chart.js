@@ -1,6 +1,6 @@
 import { buildChartConfiguration } from "../config/chart.config.js";
 
-class Chart {
+export class Chart {
   chartInterface;
   dps = [];
   xVal = 0;
@@ -103,5 +103,3 @@ class Chart {
     this.dps = [];
   }
 }
-
-export { Chart };

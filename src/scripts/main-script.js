@@ -15,19 +15,12 @@ const player = new Player();
 const chart = new Chart();
 const round = new Round(chart);
 
+// TODO: fazer as partidas serem infinitas
+// TODO: simular o dinheiro do jogador em um local storage para que seja alterado o money...
+//    ... mesmo que o usuário de F5 na página
+
 const game = new Game(player, round, chart);
 game.build();
-
-// ------------------------------------[ SCRIPT DE PEGAR TODOS AS ÚLTIMAS PARTIDAS E SALVAR ]------------------------------------
-const lastRoundsListEl = document.getElementById("last-rounds-list");
-
-const lastRoundsHistory = new RoundsHistory(lastRoundsListEl);
-lastRoundsHistory.updateRoundsHistoryInListElement();
-
-const clearRoundHistoryBtnEl = document.getElementById("clear-last-rounds");
-clearRoundHistoryBtnEl.addEventListener("click", () => {
-  lastRoundsHistory.clearRoundHistory();
-});
 
 // ------------------ [ COMEÇO DA PARTIDA ] ------------------
 // ----- Pegar todos os fieldset
@@ -143,7 +136,6 @@ betButtonsEls.forEach((button) => {
     // variável que pega o valor definido no atributo data-bet-button -> se é o primeiro ou segundo
     betStatus = selectedFieldsetEl.dataset.betStatus;
     bet = getBetValueFromInput(selectedFieldsetEl);
-    // let betValue = selectedFieldsetEl.
 
     if (!betStatus) throw new Error("fieldset status don't defined!");
     if (!isBetStatusValid(betStatus))
@@ -214,8 +206,10 @@ function changeBetFieldsetStatus(fieldsetElement, newStatus) {
  * @param {boolean} boolean Valor lógico que define se o fieldset será desabilitado ou habilitado
  */
 function setFieldsetDisabled(fieldsetElement, boolean) {
+  // validar se o elemento fieldset existe
   if (elementExists(fieldsetElement) == false)
     throw new Error(`Fieldset don't exists! - ${fieldset}`);
+  // validar se é um valor booleano (lógico)
   if (isBoolean(boolean) == false)
     throw new Error("Not a valid boolean value to disable or enable fieldset!");
 
@@ -256,3 +250,14 @@ function disableAllNotBettedFieldsetsAndButtons() {
     disableFieldsetAndBetButton(fieldset);
   });
 }
+
+// ------------------------------------[ SCRIPT DE PEGAR O HISTÓRICO DAS ÚLTIMAS PARTIDAS E EXIBIR NO HTML ]------------------------------------
+const lastRoundsListEl = document.getElementById("last-rounds-list");
+
+const lastRoundsHistory = new RoundsHistory(lastRoundsListEl);
+lastRoundsHistory.updateRoundsHistoryInListElement();
+
+const clearRoundHistoryBtnEl = document.getElementById("clear-last-rounds");
+clearRoundHistoryBtnEl.addEventListener("click", () => {
+  lastRoundsHistory.clearRoundHistory();
+});

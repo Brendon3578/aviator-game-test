@@ -13,7 +13,7 @@ console.log(
 
 import { Bet } from "./bet.js";
 
-class Player {
+export class Player {
   #money;
   #playerMoneyTextEl = document.getElementById("player-money");
   /**
@@ -98,5 +98,3 @@ class Player {
     }
   }
 }
-
-export { Player };

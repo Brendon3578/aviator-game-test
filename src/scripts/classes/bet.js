@@ -1,4 +1,4 @@
-class Bet {
+export class Bet {
   #id;
   #hasBet;
   #value;
@@ -49,5 +49,3 @@ class Bet {
     this.#hasBet = false;
   }
 }
-
-export { Bet };

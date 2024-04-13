@@ -1,4 +1,5 @@
 import {
+  elementExists,
   formatDateToBrazilianFormat,
   roundToTwoDecimalPlaces,
   showAlert,
@@ -11,6 +12,13 @@ class RoundsHistory {
 
   constructor(listElement) {
     this.#lastRoundsHistory = JSON.parse(this.#getFromStorage()) || [];
+
+    // validar se o elemento existe
+    if (elementExists(listElement) == false) {
+      throw new Error(
+        "Last Rounds History unordered list (<ul>) element don't exists!"
+      );
+    }
     this.#listElement = listElement;
   }
 
