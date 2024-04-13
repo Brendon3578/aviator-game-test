@@ -1,5 +1,6 @@
 import { Chart } from "./classes/chart.js";
 import { Game } from "./classes/game.js";
+import { RoundsHistory } from "./classes/roundsHistory.js";
 import { Player } from "./classes/player.js";
 import { Round } from "./classes/round.js";
 import {
@@ -17,24 +18,30 @@ const round = new Round(chart);
 const game = new Game(player, round, chart);
 game.build();
 
+// ------------------------------------[ SCRIPT DE PEGAR TODOS AS ÚLTIMAS PARTIDAS E SALVAR ]------------------------------------
+const lastRoundsListEl = document.getElementById("last-rounds-list");
+
+const lastRoundsHistory = new RoundsHistory(lastRoundsListEl);
+lastRoundsHistory.updateRoundsHistoryInListElement();
+
+const clearRoundHistoryBtnEl = document.getElementById("clear-last-rounds");
+clearRoundHistoryBtnEl.addEventListener("click", () => {
+  lastRoundsHistory.clearRoundHistory();
+});
+
 // ------------------ [ COMEÇO DA PARTIDA ] ------------------
+// ----- Pegar todos os fieldset
+const allFieldsetEls = document.querySelectorAll("fieldset[data-bet-status]");
+
 setTimeout(() => {
   const { roundDuration } = round.startNewRound();
 
   // ----- Desabilitar os fieldset e botões que não houveram aposta
-  let fieldsetNotBettedEls = document.querySelectorAll(
-    "fieldset[data-bet-status='bet']"
-  );
-  fieldsetNotBettedEls.forEach((fieldset) => {
-    disableFieldsetAndBetButton(fieldset);
-  });
-
-  // ----- Pegar todos os fieldset
-  let allFieldsetEls = document.querySelectorAll("fieldset[data-bet-status]");
+  disableAllNotBettedFieldsetsAndButtons();
 
   // ----- Para cada aposta feita...
   player.playersBets.forEach((bet) => {
-    // Desabilitar todos os
+    // Desabilitar todos os fieldset para não haver alteração na aposta feita
     allFieldsetEls.forEach((fieldset) => {
       setFieldsetDisabled(fieldset, true);
     });
@@ -49,21 +56,24 @@ setTimeout(() => {
       numberButtonTextEl.textContent = `${round.multiplierCount.toFixed(2)}x`;
     }, round.intervalTime);
 
+    // Quando acabar a partida, excluir o interval para que não fique repetindo infinitamente
     setTimeout(() => {
-      // quando acabar a partida, excluir o interval para que não fique repetindo
       clearInterval(updateFieldsetValueIntervalId);
     }, roundDuration);
   });
 
   // ------------- FIM DA PARTIDA ------------------
   setTimeout(() => {
-    // desabilitar TUDO
+    // salvar a partida no histórico de partidas anteriores
+    lastRoundsHistory.saveNewRoundInHistory(round.multiplierCount);
+
+    // desabilitar todos os campos
     allFieldsetEls.forEach((fieldset) => {
       disableFieldsetAndBetButton(fieldset);
 
       const buttonTextEl = fieldset.querySelector("[data-bet-button-text]");
-      changeBetFieldsetStatus(fieldset, "bet");
       buttonTextEl.textContent = "Bet";
+      changeBetFieldsetStatus(fieldset, "bet");
     });
 
     // define todas as apostas que não foram tirada a tempo como pertidas
@@ -71,15 +81,13 @@ setTimeout(() => {
 
     let lostBets = player.getLostBets();
     lostBets.forEach((lostBet) => {
-      console.log("ELE TEM QUE PERDER!");
-      let lostMoney = player.getBetValue(lostBet.index) * round.multiplierCount;
+      let lostMoney = player.getBetValue(lostBet.id) * round.multiplierCount;
       player.loseMoney(lostMoney);
 
-      console.log(`Você perdeu ${lostMoney.toFixed(2)}!`);
       showAlert(`Você perdeu ${lostMoney.toFixed(2)}!`);
     });
   }, roundDuration);
-}, 5000);
+}, round.loadingTime);
 
 // ------------------------------------[ SCRIPT DOS BOTÕES DE ADICIONAR MAIS DINHEIRO NO INPUT ]------------------------------------
 function updateBetValue(valueToAdd, inputBetEl) {
@@ -174,7 +182,6 @@ betButtonsEls.forEach((button) => {
           player.winMoney(winMoney);
 
           showAlert(`Você ganhou ${winMoney.toFixed(2)}!`);
-          console.log(`Você ganhou ${winMoney.toFixed(2)}!`);
 
           // mudança no HTML
           changeBetFieldsetStatus(selectedFieldsetEl, "bet");
@@ -192,6 +199,8 @@ betButtonsEls.forEach((button) => {
 });
 
 function changeBetFieldsetStatus(fieldsetElement, newStatus) {
+  if (elementExists(fieldsetElement) == false)
+    throw new Error(`Fieldset don't exists! - ${fieldset}`);
   if (!isBetStatusValid(newStatus))
     throw new Error("Not a valid bet status to change fieldset!");
   fieldsetElement.dataset.betStatus = newStatus;
@@ -204,16 +213,16 @@ function changeBetFieldsetStatus(fieldsetElement, newStatus) {
  * @param {HTMLFieldSetElement} fieldset Elemento fieldset que será desabilitado ou habilitado
  * @param {boolean} boolean Valor lógico que define se o fieldset será desabilitado ou habilitado
  */
-function setFieldsetDisabled(fieldset, boolean) {
-  if (elementExists(fieldset) == false)
+function setFieldsetDisabled(fieldsetElement, boolean) {
+  if (elementExists(fieldsetElement) == false)
     throw new Error(`Fieldset don't exists! - ${fieldset}`);
   if (isBoolean(boolean) == false)
     throw new Error("Not a valid boolean value to disable or enable fieldset!");
 
   if (boolean) {
-    fieldset.setAttribute("disabled", "");
+    fieldsetElement.setAttribute("disabled", "");
   } else {
-    fieldset.removeAttribute("disabled");
+    fieldsetElement.removeAttribute("disabled");
   }
 }
 
@@ -239,7 +248,11 @@ function setBetButtonDisabled(betButtonElement, boolean) {
   betButtonElement.dataset.buttonDisabled = boolean;
 }
 
-console.log(
-  "%cBrendon desenvolveu isso. ☕",
-  "color: #ED1836; font-size: 16px; padding: 8px 16px; background-color: #0f1923; border-radius: 8px; "
-);
+function disableAllNotBettedFieldsetsAndButtons() {
+  let fieldsetNotBettedEls = document.querySelectorAll(
+    "fieldset[data-bet-status='bet']"
+  );
+  fieldsetNotBettedEls.forEach((fieldset) => {
+    disableFieldsetAndBetButton(fieldset);
+  });
+}

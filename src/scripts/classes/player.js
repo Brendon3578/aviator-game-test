@@ -1,3 +1,16 @@
+console.log(
+  "%cBrendon desenvolveu isso. ☕",
+  [
+    "color: #ED1836;",
+    "font-size: 16px;",
+    "font-weight: bold;",
+    "padding: 10px 16px;",
+    "background-color: #0f1923;",
+    "border-radius: 8px;",
+    "border: 1px solid #333",
+  ].join("")
+);
+
 import { Bet } from "./bet.js";
 
 class Player {
@@ -24,18 +37,17 @@ class Player {
   }
 
   setMoney(newMoney) {
+    if (isNaN(newMoney)) throw new Error("Money to be set is not a number!");
     this.#money = newMoney;
   }
 
   winMoney(winnedMoney) {
-    this.#money += winnedMoney;
+    this.setMoney(this.#money + winnedMoney);
     this.updateMoneyOnInterface();
-    // console.log(this.money);
   }
   loseMoney(lostMoney) {
-    this.#money -= lostMoney;
+    this.setMoney(this.#money - lostMoney);
     this.updateMoneyOnInterface();
-    // console.log(this.money);
   }
 
   updateMoneyOnInterface() {

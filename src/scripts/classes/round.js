@@ -2,7 +2,10 @@ import { Chart } from "./chart.js";
 import { getRandomInt } from "../utils.js";
 
 export class Round {
-  #updateChartIntervalTime = 125;
+  // #roundLoadingTimeMS = 0;
+  #roundLoadingTimeMS = 10000;
+  #updateChartIntervalTimeMS = 125;
+  #countToAdd;
   /**
    * @typedef {import('./chart.js').Chart} Chart
    * @type Chart
@@ -28,16 +31,22 @@ export class Round {
     return this.#multiplierCount;
   }
 
+  get loadingTime() {
+    return this.#roundLoadingTimeMS;
+  }
+
   get intervalTime() {
-    return this.#updateChartIntervalTime;
+    return this.#updateChartIntervalTimeMS;
   }
 
   constructor(chart) {
     this.#chart = chart;
+    this.#countToAdd = getRandomInt(0.07) + 0.03;
+    console.log(`O contador pode aumentar em até ${this.#countToAdd}`);
     this.#imageMarkerAviatorEl = document.getElementById("aviator");
   }
 
-  generateRoundDuration() {
+  #generateRoundDuration() {
     // máximo de segundos que a partida irá acontecer
     const ONE_SECOND = 1000;
 
@@ -101,15 +110,11 @@ export class Round {
     // this.#imageMarkerAviatorEl.style.display = "block";
     this.#imageMarkerAviatorEl.classList.remove("fly-away");
 
-    // esse algoritmo irá atualizar o gráfico constantemente
-    const intervalId = setInterval(() => {
-      this.#multiplierCount += getRandomInt(0.05);
-      this.#chart.setTitleText(`${this.#multiplierCount.toFixed(2)}x`);
-      this.#chart.updateChart();
-    }, this.#updateChartIntervalTime);
+    // Esse algoritmo irá atualizar o gráfico constantemente (a cada 0.125 ms) e o multiplicador
+    const intervalId = this.#createIntervalToUpdateChart();
 
     // ou definir como 10000 -> 10 segundos
-    const roundDuration = this.generateRoundDuration();
+    const roundDuration = this.#generateRoundDuration();
 
     const timeoutId = setTimeout(() => {
       clearInterval(intervalId);
@@ -121,5 +126,14 @@ export class Round {
     }, roundDuration);
 
     return { roundDuration };
+  }
+
+  #createIntervalToUpdateChart() {
+    const intervalId = setInterval(() => {
+      this.#multiplierCount += getRandomInt(this.#countToAdd);
+      this.#chart.setTitleText(`${this.#multiplierCount.toFixed(2)}x`);
+      this.#chart.updateChart();
+    }, this.#updateChartIntervalTimeMS);
+    return intervalId;
   }
 }

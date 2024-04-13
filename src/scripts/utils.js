@@ -33,7 +33,17 @@ function getRandomInt(max) {
   return Math.round((randomNumber + Number.EPSILON) * 100) / 100;
 }
 
+/**
+ * Arredonda um número de ponto flutuante para duas casas decimais.
+ * @param {number} numero - O número a ser arredondado.
+ * @returns {number} Um número com apenas duas casas decimais.
+ */
+function roundToTwoDecimalPlaces(number) {
+  return Math.round(number * 100) / 100;
+}
+
 function showAlert(message, isError = false) {
+  console.log(message);
   window.alert(message);
 }
 
@@ -54,4 +64,5 @@ export {
   isBoolean,
   elementExists,
   isBetStatusValid,
+  roundToTwoDecimalPlaces,
 };
