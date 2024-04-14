@@ -13,7 +13,7 @@ class RoundsHistory {
   constructor(listElement) {
     this.#lastRoundsHistory = JSON.parse(this.#getFromStorage()) || [];
 
-    // validar se o elemento existe
+    // -- Validar se o elemento existe
     if (elementExists(listElement) == false) {
       throw new Error(
         "Last Rounds History unordered list (<ul>) element don't exists!"
@@ -37,7 +37,7 @@ class RoundsHistory {
     });
 
     if (this.#lastRoundsHistory.length > 20) {
-      // deixar no máximo 20 elementos
+      // -- Deixar no máximo 20 elementos
       this.#lastRoundsHistory.pop();
     }
 
@@ -46,19 +46,19 @@ class RoundsHistory {
     this.updateRoundsHistoryInListElement();
   }
 
-  #deleteAllRoundsInHistory() {
+  #deleteAllRoundsInHistoryStorage() {
     this.#lastRoundsHistory = [];
     this.#saveInStorage(JSON.stringify([]));
   }
 
   #createBackgroundColor(roundValue) {
     let hue = 200 + roundValue * 2;
-    // example: background-color: hsl(230, 40%, 50%)
+    // exemplo: background-color: hsl(230, 40%, 50%)
     return `hsl(${hue}, 40%, 50%)`;
   }
 
   clearRoundHistory() {
-    this.#deleteAllRoundsInHistory();
+    this.#deleteAllRoundsInHistoryStorage();
     this.updateRoundsHistoryInListElement();
     showAlert("Histórico das últimas partidas excluídas.");
   }

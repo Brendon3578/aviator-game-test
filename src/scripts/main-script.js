@@ -23,7 +23,7 @@ const game = new Game(player, round, chart);
 game.build();
 
 // ------------------ [ COMEÇO DA PARTIDA ] ------------------
-// ----- Pegar todos os fieldset
+// -- Pegar todos os fieldset
 const allFieldsetEls = document.querySelectorAll("fieldset[data-bet-status]");
 
 setTimeout(() => {
@@ -34,7 +34,7 @@ setTimeout(() => {
 
   // ----- Para cada aposta feita...
   player.playersBets.forEach((bet) => {
-    // Desabilitar todos os fieldset para não haver alteração na aposta feita
+    // -- Desabilitar todos os fieldset para não haver alteração na aposta feita
     allFieldsetEls.forEach((fieldset) => {
       setFieldsetDisabled(fieldset, true);
     });
@@ -45,11 +45,12 @@ setTimeout(() => {
 
     changeBetFieldsetStatus(bettedFieldsetEl, "cash-out");
 
+    // -- Função que muda o texto que tem no botão de aposta
     const updateFieldsetValueIntervalId = setInterval(() => {
       numberButtonTextEl.textContent = `${round.multiplierCount.toFixed(2)}x`;
     }, round.intervalTime);
 
-    // Quando acabar a partida, excluir o interval para que não fique repetindo infinitamente
+    // --  Quando acabar a partida, excluir o interval para que não fique repetindo infinitamente
     setTimeout(() => {
       clearInterval(updateFieldsetValueIntervalId);
     }, roundDuration);
@@ -57,10 +58,10 @@ setTimeout(() => {
 
   // ------------- FIM DA PARTIDA ------------------
   setTimeout(() => {
-    // salvar a partida no histórico de partidas anteriores
+    // -- Salvar a partida no histórico de partidas anteriores
     lastRoundsHistory.saveNewRoundInHistory(round.multiplierCount);
 
-    // desabilitar todos os campos
+    // -- Desabilitar todos os campos
     allFieldsetEls.forEach((fieldset) => {
       disableFieldsetAndBetButton(fieldset);
 
@@ -69,7 +70,7 @@ setTimeout(() => {
       changeBetFieldsetStatus(fieldset, "bet");
     });
 
-    // define todas as apostas que não foram tirada a tempo como pertidas
+    // -- Define todas as apostas que não foram tirada a tempo
     player.loseBetsDone();
 
     let lostBets = player.getLostBets();
@@ -92,7 +93,7 @@ function updateBetValue(valueToAdd, inputBetEl) {
   }
 }
 
-// Script dos botões que aumentam o valor no input de número da aposta
+// -------------  Script dos botões que aumentam o valor no input de número da aposta -------------
 const updateBetButtons = document.querySelectorAll(
   "button[data-button-update-bet]"
 );
@@ -124,16 +125,16 @@ betButtonsEls.forEach((button) => {
   const buttonTextEl = button.querySelector("[data-bet-button-text]");
   const selectedFieldsetEl = document.getElementById(`bet-fieldset-${betId}`);
 
-  // verificar se o atributo data-bet-button está definido dentro do button
+  // -- Verificar se o atributo data-bet-button está definido dentro do button
   if (!betId) throw new Error("button dataset attribute don't defined!");
-  // verificar se os elementos dentro do button existem
+  // -- Verificar se os elementos dentro do button existem
   if (!betValueButtonTextEl || !buttonTextEl)
     throw new Error("button's elements not defined correctly!");
-  // verificar se o fieldset existe no HTML
+  // -- Verificar se o fieldset existe no HTML
   if (!selectedFieldsetEl) throw new Error("fieldset don't exists!");
 
   button.addEventListener("click", () => {
-    // variável que pega o valor definido no atributo data-bet-button -> se é o primeiro ou segundo
+    // -- Variável que pega o valor definido no atributo data-bet-button -> se é o primeiro ou segundo
     betStatus = selectedFieldsetEl.dataset.betStatus;
     bet = getBetValueFromInput(selectedFieldsetEl);
 
@@ -143,13 +144,13 @@ betButtonsEls.forEach((button) => {
     switch (betStatus) {
       case "bet":
         if (bet > player.money) {
-          // verificar se o player possui fatecoins suficientes
+          // -- Verificar se o player possui fatecoins suficientes
           showAlert("Você não possui esse dinheiro!");
         } else {
           player.setBetValue(betId, bet);
           player.loseMoney(bet);
 
-          // mudança no HTML
+          // -- Mudança no HTML
           changeBetFieldsetStatus(selectedFieldsetEl, "cancel");
           setFieldsetDisabled(selectedFieldsetEl, true);
           buttonTextEl.textContent = "Cancel";
@@ -160,7 +161,7 @@ betButtonsEls.forEach((button) => {
         player.cancelBet(betId);
         player.winMoney(bet);
 
-        // mudança no HTML
+        // -- Mudança no HTML
         changeBetFieldsetStatus(selectedFieldsetEl, "bet");
         setFieldsetDisabled(selectedFieldsetEl, false);
         buttonTextEl.textContent = "Bet";
@@ -175,7 +176,7 @@ betButtonsEls.forEach((button) => {
 
           showAlert(`Você ganhou ${winMoney.toFixed(2)}!`);
 
-          // mudança no HTML
+          // -- Mudança no HTML
           changeBetFieldsetStatus(selectedFieldsetEl, "bet");
           setFieldsetDisabled(selectedFieldsetEl, true);
           setBetButtonDisabled(button, true);

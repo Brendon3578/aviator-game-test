@@ -26,7 +26,7 @@ export class Game {
   build() {
     this.#chart.render();
     this.#round.loadingNewRound();
-    this.#player.setMoney(100);
+    this.#player.loadMoneyFromStorage();
     this.#player.updateMoneyOnInterface();
   }
 }

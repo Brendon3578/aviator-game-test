@@ -34,7 +34,7 @@ export class Chart {
     this.addMarkerResizeEvent();
   }
 
-  // função que atualiza a localização do ícone do aviãozinho caso o usuário redimensione a tela
+  // -- Função que atualiza a posição do ícone do aviãozinho caso o usuário redimensione a tela
   addMarkerResizeEvent() {
     window.addEventListener("resize", () => {
       if (this.shouldUpdateMarkerPositionAfterResize) {
@@ -60,23 +60,18 @@ export class Chart {
     this.imageMarker.style.display = "block";
     this.imageMarker.style.top = `${pixelY - imageHeight / 2}px`;
     this.imageMarker.style.left = `${pixelX - imageWidth / 2}px`;
-
-    // imageMarker.css({
-    //   position: "absolute",
-    //   display: "block",
-    //   top: pixelY - imageMarker.height() / 2,
-    //   left: pixelX - imageMarker.width() / 2,
-    // });
   }
 
+  /**
+   * Função que atualiza o gráfico em tempo real
+   */
   updateChart() {
     // esse cálculo faz a impressão ddo avião cair
-    // yVal = Math.log(xVal + 1) + Math.sin(xVal * randomNumberToSumYAxis);
-    // yVal = Math.log(xVal + 1); // gráfico de log10()
-    // this.yVal = Math.sin(this.xVal) + this.xVal; // gráfico de ondulação + crescente
-    this.yVal = this.xVal ** 2; // gráfico exponencial
+    this.yVal = this.xVal ** 2; // Gráfico exponencial
 
-    // console.log(yVal);
+    // yVal = Math.log(xVal + 1) + Math.sin(xVal * randomNumberToSumYAxis);
+    // yVal = Math.log(xVal + 1); // gráfico de log10() sem aparecer o número negativo
+    // this.yVal = Math.sin(this.xVal) + this.xVal; // gráfico de ondulação + crescente
     this.dps.push({ x: this.xVal, y: this.yVal });
     this.xVal++;
     this.chartInterface.render();

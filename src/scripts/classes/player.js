@@ -37,8 +37,29 @@ export class Player {
   }
 
   setMoney(newMoney) {
-    if (isNaN(newMoney)) throw new Error("Money to be set is not a number!");
+    if (isNaN(newMoney))
+      throw new Error(`Money to be changed is not a number!: ${newMoney}`);
+
+    this.#saveMoneyInStorage(newMoney);
     this.#money = newMoney;
+  }
+
+  #saveMoneyInStorage(money) {
+    window.localStorage.setItem(
+      "player-money",
+      JSON.stringify({ money: money })
+    );
+  }
+
+  loadMoneyFromStorage() {
+    let money = JSON.parse(window.localStorage.getItem("player-money")).money;
+    if (money == null) {
+      console.log("Valor de Money definido no local storage.");
+      this.#saveMoneyInStorage(100);
+      this.setMoney(100);
+    } else {
+      this.setMoney(money);
+    }
   }
 
   winMoney(winnedMoney) {
