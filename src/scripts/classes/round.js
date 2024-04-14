@@ -1,5 +1,5 @@
 import { Chart } from "./chart.js";
-import { getRandomInt } from "../utils.js";
+import { getRandomNumber } from "../utils.js";
 
 export class Round {
   // #roundLoadingTimeMS = 0;
@@ -41,8 +41,8 @@ export class Round {
 
   constructor(chart) {
     this.#chart = chart;
-    this.#countToAdd = getRandomInt(0.07) + 0.03;
-    console.log(`O contador pode aumentar em até ${this.#countToAdd}`);
+    this.#countToAdd = getRandomNumber(0.1) + 0.05; // min: 0.06, max: 0.15
+    console.log(`[info] - O contador pode aumentar em até ${this.#countToAdd}`);
     this.#imageMarkerAviatorEl = document.getElementById("aviator");
   }
 
@@ -50,25 +50,33 @@ export class Round {
     // máximo de segundos que a partida irá acontecer
     const ONE_SECOND = 1000;
 
-    const probability = getRandomInt(1);
+    const probability = getRandomNumber(1);
     let gameDuration = 0;
 
     if (probability < 0.6) {
       // 60% da partida durar até 10 segundos
-      gameDuration = getRandomInt(10) * ONE_SECOND;
-      console.log(`60% de chance! - a partida pode durar até 10 segundos`);
+      gameDuration = getRandomNumber(10) * ONE_SECOND;
+      console.log(
+        `[info] - 60% de chance! - a partida pode durar até 10 segundos`
+      );
     } else if (probability < 0.9) {
       // 30% da partida durar até 50 segundos
-      gameDuration = getRandomInt(50) * ONE_SECOND;
-      console.log(`30% de chance! - a partida pode durar até 50 segundos`);
+      gameDuration = getRandomNumber(50) * ONE_SECOND;
+      console.log(
+        `[info] - 30% de chance! - a partida pode durar até 50 segundos`
+      );
     } else {
       // 10% da partida durar até 300 segundos
-      gameDuration = getRandomInt(300) * ONE_SECOND;
-      console.log(`10% de chance! - a partida pode durar até 300 segundos`);
+      gameDuration = getRandomNumber(300) * ONE_SECOND;
+      console.log(
+        `[info] - 10% de chance! - a partida pode durar até 300 segundos`
+      );
     }
     // gameDuration = 10000;
     console.log(
-      `Essa partida durará ${(gameDuration / 1000).toFixed(2)} segundos.`
+      `[start] - Essa partida durará ${(gameDuration / 1000).toFixed(
+        2
+      )} segundos.`
     );
     return gameDuration;
   }
@@ -130,7 +138,7 @@ export class Round {
 
   #createIntervalToUpdateChart() {
     const intervalId = setInterval(() => {
-      this.#multiplierCount += getRandomInt(this.#countToAdd);
+      this.#multiplierCount += getRandomNumber(this.#countToAdd);
       this.#chart.setTitleText(`${this.#multiplierCount.toFixed(2)}x`);
       this.#chart.updateChart();
     }, this.#updateChartIntervalTimeMS);

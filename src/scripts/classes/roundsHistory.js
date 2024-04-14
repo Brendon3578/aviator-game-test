@@ -41,7 +41,7 @@ class RoundsHistory {
       this.#lastRoundsHistory.pop();
     }
 
-    console.info("-> Partida salvada no local storage!");
+    console.log("[success] - Partida salvada no local storage!");
     this.#saveInStorage(JSON.stringify(this.#lastRoundsHistory));
     this.updateRoundsHistoryInListElement();
   }

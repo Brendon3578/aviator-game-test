@@ -1,3 +1,16 @@
+console.log(
+  "%cBrendon desenvolveu isso. ☕",
+  [
+    "color: #ED1836;",
+    "font-size: 16px;",
+    "font-weight: bold;",
+    "padding: 10px 16px;",
+    "background-color: #0f1923;",
+    "border-radius: 8px;",
+    "border: 1px solid #333",
+  ].join("")
+);
+
 /**
  * Retorna a data atual formatada conforme o fuso horário "pt-BR".
  * @param {Date} date - O objeto Date que representa a data.
@@ -22,11 +35,11 @@ const isBoolean = (b) => (typeof b == "boolean" ? true : false);
 const elementExists = (el) => el != null;
 
 /**
- * Retorna um número inteiro aleatório entre 0 (inclusive) e o valor máximo fornecido (exclusive), com precisão de duas casas decimais.
+ * Retorna um número aleatório entre 0 (inclusive) e o valor máximo fornecido (exclusive), com precisão de duas casas decimais.
  * @param {number} max - O valor máximo (exclusive) a partir do qual o número aleatório será gerado.
- * @returns {number} Retorna um número inteiro aleatório entre 0 (inclusive) e o valor máximo fornecido (exclusive), com precisão de duas casas decimais.
+ * @returns {number} Retorna um número aleatório entre 0 (inclusive) e o valor máximo fornecido (exclusive), com precisão de duas casas decimais.
  */
-function getRandomInt(max) {
+function getRandomNumber(max) {
   const randomNumber = Math.random() * max;
   // Arredondar para duas casas decimais
   // https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
@@ -43,7 +56,7 @@ function roundToTwoDecimalPlaces(number) {
 }
 
 function showAlert(message, isError = false) {
-  console.log(message);
+  console.log(`[alert] - ${message}`);
   window.alert(message);
 }
 
@@ -59,7 +72,7 @@ function isBetStatusValid(betStatus) {
 
 export {
   formatDateToBrazilianFormat,
-  getRandomInt,
+  getRandomNumber,
   showAlert,
   isBoolean,
   elementExists,
