@@ -84,12 +84,12 @@ export class Player {
    * Carrega o dinheiro do jogador do localStorage do navegador.
    */
   loadMoneyFromStorage() {
-    let money = JSON.parse(window.localStorage.getItem("player-money")).money;
-    if (money == null) {
+    let moneyObject = JSON.parse(window.localStorage.getItem("player-money"));
+    if (moneyObject == null) {
       this.#saveMoneyInStorage(100);
       this.#setMoney(100);
     } else {
-      this.#setMoney(money);
+      this.#setMoney(moneyObject.money);
     }
     log("storage", "Dinheiro do jogador definido no localStorage!");
   }
