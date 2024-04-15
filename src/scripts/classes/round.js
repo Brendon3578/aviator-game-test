@@ -121,7 +121,7 @@ export class Round {
   }
 
   startNewRound() {
-    this.#countToAdd = getRandomNumber(0.1) + 0.05; // min: 0.06, max: 0.15
+    this.#countToAdd = getRandomNumber(0.2) + 0.05; // min: 0.06, max: 0.25
     log("info", `O contador pode aumentar em até ${this.#countToAdd}`);
 
     this.#isGameEnded = false;

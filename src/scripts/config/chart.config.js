@@ -19,6 +19,7 @@ export function buildChartConfiguration(dps) {
     toolTip: {
       enabled: false,
     },
+    interactivityEnabled: false, // desativar o hover do usuário dentro do gráfico
     axisX: {
       lineColor: "#4b5563", //gray 600
       labelFontColor: "#4b5563", //gray 600

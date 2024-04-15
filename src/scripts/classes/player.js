@@ -200,6 +200,6 @@ export class Player {
   }
 
   hasEnoughMoney(moneyToCompare) {
-    return moneyToCompare > this.money;
+    return moneyToCompare < this.money;
   }
 }

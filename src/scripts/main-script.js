@@ -45,8 +45,12 @@ async function mainGame() {
     const numberButtonTextEl = bettedFieldsetEl.querySelector(
       "[data-bet-text-value]"
     );
+    const buttonTextEl = bettedFieldsetEl.querySelector(
+      "[data-bet-button-text]"
+    );
 
     changeBetFieldsetStatus(bettedFieldsetEl, "cash-out");
+    setBetButtonStatusText(buttonTextEl, "Cash out");
 
     // -- Função que muda o texto que tem no botão de aposta
     const updateFieldsetValueIntervalId = setInterval(() => {
@@ -69,7 +73,7 @@ async function mainGame() {
       disableFieldsetAndBetButton(fieldset);
 
       const buttonTextEl = fieldset.querySelector("[data-bet-button-text]");
-      buttonTextEl.textContent = "Bet";
+      setBetButtonStatusText(buttonTextEl, "Bet");
       changeBetFieldsetStatus(fieldset, "bet");
     });
 
@@ -163,18 +167,19 @@ betButtonsEls.forEach((button) => {
 
     switch (betStatus) {
       case "bet":
-        if (player.hasEnoughMoney(bet)) {
-          // -- Verificar se o player possui fatecoins suficientes
+        if (player.hasEnoughMoney(bet) == false) {
+          // -- Verificar se o player não possui fatecoins suficientes
           showAlert("Você não possui esse dinheiro!");
-        } else {
-          player.setBetValue(betId, bet);
-          player.loseMoney(bet);
-
-          // -- Mudança no HTML
-          changeBetFieldsetStatus(selectedFieldsetEl, "cancel");
-          setFieldsetDisabled(selectedFieldsetEl, true);
-          buttonTextEl.textContent = "Cancel";
+          break;
         }
+
+        player.setBetValue(betId, bet);
+        player.loseMoney(bet);
+
+        // -- Mudança no HTML
+        changeBetFieldsetStatus(selectedFieldsetEl, "cancel");
+        setFieldsetDisabled(selectedFieldsetEl, true);
+        setBetButtonStatusText(buttonTextEl, "Cancel");
 
         break;
       case "cancel":
@@ -184,7 +189,7 @@ betButtonsEls.forEach((button) => {
         // -- Mudança no HTML
         changeBetFieldsetStatus(selectedFieldsetEl, "bet");
         setFieldsetDisabled(selectedFieldsetEl, false);
-        buttonTextEl.textContent = "Bet";
+        setBetButtonStatusText(buttonTextEl, "Bet");
 
         break;
       case "cash-out":
@@ -200,7 +205,7 @@ betButtonsEls.forEach((button) => {
           changeBetFieldsetStatus(selectedFieldsetEl, "bet");
           setFieldsetDisabled(selectedFieldsetEl, true);
           setBetButtonDisabled(button, true);
-          buttonTextEl.textContent = "Bet";
+          setBetButtonStatusText(buttonTextEl, "Bet");
         }
         break;
 
@@ -261,6 +266,7 @@ function disableFieldsetAndBetButton(fieldsetElement, boolean = true) {
 function setBetButtonDisabled(betButtonElement, boolean) {
   if (elementExists(betButtonElement) == false)
     throw new Error(`Bet button element don't exists! - ${betButtonElement}`);
+
   if (isBoolean(boolean) == false)
     throw new Error("Not a valid boolean value to disable or enable button!");
   betButtonElement.dataset.buttonDisabled = boolean;
@@ -273,6 +279,13 @@ function disableAllNotBettedFieldsetsAndButtons() {
   fieldsetNotBettedEls.forEach((fieldset) => {
     disableFieldsetAndBetButton(fieldset);
   });
+}
+
+function setBetButtonStatusText(betButtonElement, status) {
+  if (elementExists(betButtonElement) == false)
+    throw new Error(`Bet button element don't exists! - ${betButtonElement}`);
+
+  betButtonElement.textContent = status;
 }
 
 // ------------------------------------[ SCRIPT DE PEGAR O HISTÓRICO DAS ÚLTIMAS PARTIDAS E EXIBIR NO HTML ]------------------------------------
