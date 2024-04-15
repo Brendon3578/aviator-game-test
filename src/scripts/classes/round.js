@@ -78,7 +78,9 @@ export class Round {
     );
 
     // Calcular a duração aleatória dentro do intervalo selecionado
-    gameDuration = getRandomNumber(selectedRange.maxDuration) * ONE_SECOND_MS;
+    gameDuration =
+      getRandomNumber(selectedRange.maxDuration) * ONE_SECOND_MS +
+      ONE_SECOND_MS;
     message = selectedRange.message;
 
     log("round", message);
