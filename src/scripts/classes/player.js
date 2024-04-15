@@ -85,13 +85,17 @@ export class Player {
    */
   loadMoneyFromStorage() {
     let moneyObject = JSON.parse(window.localStorage.getItem("player-money"));
-    if (moneyObject == null) {
-      this.#saveMoneyInStorage(100);
-      this.#setMoney(100);
-    } else {
+    if (moneyObject != null) {
       this.#setMoney(moneyObject.money);
+
+      log("storage", "Dinheiro do jogador foi carregado do localStorage!");
+      return;
     }
-    log("storage", "Dinheiro do jogador definido no localStorage!");
+
+    this.#saveMoneyInStorage(100);
+    this.#setMoney(100);
+    log("storage", "Dinheiro do jogador foi definido no localStorage!");
+    return;
   }
 
   /**
@@ -193,5 +197,9 @@ export class Player {
     if (betToUpdate) {
       betToUpdate.winBet();
     }
+  }
+
+  hasEnoughMoney(moneyToCompare) {
+    return moneyToCompare > this.money;
   }
 }

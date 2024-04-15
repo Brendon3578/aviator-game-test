@@ -84,7 +84,7 @@ async function sleep(ms) {
 
 /**
  * Função responsável por exibir uma mensagem informativa, de alerta ou executar uma operação de espera ou armazenamento.
- * @typedef {("info"|"alert"|"sleep"|"storage"|"start")} ActionType
+ * @typedef {("info"|"alert"|"sleep"|"storage"|"start"|"round")} ActionType
  */
 
 /**

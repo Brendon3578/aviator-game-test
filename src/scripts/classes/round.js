@@ -47,25 +47,41 @@ export class Round {
   #generateRoundDuration() {
     // máximo de segundos que a partida irá acontecer
     const ONE_SECOND = 1000;
-
     const probability = getRandomNumber(1);
     let gameDuration = 0;
+    let message = "";
 
-    if (probability < 0.6) {
-      // 60% da partida durar até 10 segundos
-      gameDuration = getRandomNumber(10) * ONE_SECOND;
-      log("info", "60% de chance! - a partida pode durar até 10 segundos");
-    } else if (probability < 0.9) {
-      // 30% da partida durar até 50 segundos
-      gameDuration = getRandomNumber(50) * ONE_SECOND;
-      log("info", "30% de chance! - a partida pode durar até 50 segundos");
-    } else {
-      // 10% da partida durar até 300 segundos
-      gameDuration = getRandomNumber(300) * ONE_SECOND;
-      log("info", "10% de chance! - a partida pode durar até 300 segundos");
-    }
+    // Mapeamento de probabilidades para intervalos de duração
+    const durationRanges = [
+      {
+        probability: 0.6,
+        maxDuration: 10,
+        message: "60% - a partida pode durar até 10 segundos",
+      },
+      {
+        probability: 0.9,
+        maxDuration: 50,
+        message: "30% - a partida pode durar até 50 segundos",
+      },
+      {
+        probability: 1,
+        maxDuration: 300,
+        message: "10% - a partida pode durar até 300 segundos",
+      },
+    ];
 
-    // gameDuration = 2000;
+    // Encontrar o intervalo correspondente à probabilidade gerada
+    // exemplo: 0.8 de probability
+    // 0.8 < 0.6? -> vai pro próximo (0.8 < 0.8) -> cai aqui
+    const selectedRange = durationRanges.find(
+      (range) => probability < range.probability
+    );
+
+    // Calcular a duração aleatória dentro do intervalo selecionado
+    gameDuration = getRandomNumber(selectedRange.maxDuration) * ONE_SECOND;
+    message = selectedRange.message;
+
+    log("round", message);
     log(
       "start",
       `Essa partida durará ${(gameDuration / 1000).toFixed(2)} segundos.`

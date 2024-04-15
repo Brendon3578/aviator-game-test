@@ -100,13 +100,16 @@ game.init(mainGame);
 // setTimeout(mainGame, round.loadingTime);
 
 // ------------------------------------[ SCRIPT DOS BOTÕES DE ADICIONAR MAIS DINHEIRO NO INPUT ]------------------------------------
+function isValidValueToBet(value) {
+  return isNaN(value) == false && value > 0.01;
+}
+
 function updateBetValue(valueToAdd, inputBetEl) {
   let newValue = parseFloat(inputBetEl.value) + parseInt(valueToAdd);
-  if (isNaN(newValue) || newValue < 0.01) {
-    inputBetEl.value = "1";
-  } else {
-    inputBetEl.value = newValue;
+  if (isValidValueToBet(newValue) == false) {
+    newValue = 1;
   }
+  inputBetEl.value = newValue;
 }
 
 // -------------  Script dos botões que aumentam o valor no input de número da aposta -------------
@@ -157,9 +160,10 @@ betButtonsEls.forEach((button) => {
     if (!betStatus) throw new Error("fieldset status don't defined!");
     if (!isBetStatusValid(betStatus))
       throw new Error("Not a valid fieldset status!");
+
     switch (betStatus) {
       case "bet":
-        if (bet > player.money) {
+        if (player.hasEnoughMoney(bet)) {
           // -- Verificar se o player possui fatecoins suficientes
           showAlert("Você não possui esse dinheiro!");
         } else {

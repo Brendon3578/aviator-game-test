@@ -8,6 +8,7 @@ import {
 
 class RoundsHistory {
   #lastRoundsHistory = [];
+  #maxRoundsToSave = 20;
   #key = "last-rounds-history";
   #listElement;
 
@@ -27,6 +28,18 @@ class RoundsHistory {
     window.localStorage.setItem(this.#key, value);
   }
 
+  get size() {
+    return this.#lastRoundsHistory.length;
+  }
+
+  get isEmpty() {
+    return this.size == 0;
+  }
+
+  get hasMaxCapacity() {
+    return this.size > this.#maxRoundsToSave;
+  }
+
   #getFromStorage() {
     return window.localStorage.getItem(this.#key);
   }
@@ -37,8 +50,8 @@ class RoundsHistory {
       timestamp: formatDateToBrazilianFormat(new Date()),
     });
 
-    if (this.#lastRoundsHistory.length > 20) {
-      // -- Deixar no máximo 20 elementos
+    // -- Deixar no máximo 20 elementos
+    if (this.hasMaxCapacity) {
       this.#lastRoundsHistory.pop();
     }
 
@@ -53,7 +66,7 @@ class RoundsHistory {
   }
 
   #createBackgroundColor(roundValue) {
-    let hue = 200 + roundValue * 2;
+    let hue = 200 + roundValue * 5;
     // exemplo: background-color: hsl(230, 40%, 50%)
     return `hsl(${hue}, 40%, 50%)`;
   }
@@ -66,13 +79,14 @@ class RoundsHistory {
 
   updateRoundsHistoryInListElement() {
     this.#listElement.innerHTML = "";
-    if (this.#lastRoundsHistory.length == 0) {
+    if (this.isEmpty) {
       this.#listElement.innerHTML = this.createEmptyItemElement();
-    } else {
-      this.#lastRoundsHistory.forEach((lastRound) => {
-        this.#listElement.innerHTML += this.createListItemElement(lastRound);
-      });
+      return;
     }
+    this.#lastRoundsHistory.forEach((lastRound) => {
+      this.#listElement.innerHTML += this.createListItemElement(lastRound);
+    });
+    return;
   }
 
   createListItemElement(round) {
