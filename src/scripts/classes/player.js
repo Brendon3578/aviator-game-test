@@ -1,4 +1,4 @@
-import { elementExists } from "../utils.js";
+import { elementExists, log } from "../utils.js";
 import { Bet } from "./bet.js";
 
 /**
@@ -91,7 +91,7 @@ export class Player {
     } else {
       this.#setMoney(money);
     }
-    console.log("[success] - Dinheiro do jogador definido no localStorage!");
+    log("storage", "Dinheiro do jogador definido no localStorage!");
   }
 
   /**

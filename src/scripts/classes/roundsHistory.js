@@ -1,6 +1,7 @@
 import {
   elementExists,
   formatDateToBrazilianFormat,
+  log,
   roundToTwoDecimalPlaces,
   showAlert,
 } from "../utils.js";
@@ -41,7 +42,7 @@ class RoundsHistory {
       this.#lastRoundsHistory.pop();
     }
 
-    console.log("[success] - Partida salvada no local storage!");
+    log("storage", "Partida salva no localStorage!");
     this.#saveInStorage(JSON.stringify(this.#lastRoundsHistory));
     this.updateRoundsHistoryInListElement();
   }

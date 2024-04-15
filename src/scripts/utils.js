@@ -56,7 +56,7 @@ function roundToTwoDecimalPlaces(number) {
 }
 
 function showAlert(message, isError = false) {
-  console.log(`[alert] - ${message}`);
+  log("alert", message);
   window.alert(message);
 }
 
@@ -70,11 +70,30 @@ function isBetStatusValid(betStatus) {
   return VALID_BET_STATUS.includes(betStatus);
 }
 
+/**
+ * Função que aguarda a quantidade especificada de milissegundos antes de resolver a promessa.
+ * Útil para usar com `async` e `await` fazendo com que o programa espere antes de seguir a própria instrução.
+ * @param {number} ms - O número de milissegundos a aguardar.
+ * @returns {Promise<void>} - Uma promessa que será resolvida após o tempo especificado.
+ */
 async function sleep(ms) {
-  console.log(
-    `[time] - Esperando ${parseFloat(ms / 1000).toFixed(2)} segundos`
-  );
+  log("sleep", `Esperando ${parseFloat(ms / 1000).toFixed(2)} segundos`);
+
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Função responsável por exibir uma mensagem informativa, de alerta ou executar uma operação de espera ou armazenamento.
+ * @typedef {("info"|"alert"|"sleep"|"storage"|"start")} ActionType
+ */
+
+/**
+ * Função utilitária apenas para mostrar a mensagem no console.
+ * @param {ActionType} type - O tipo da mensagem.
+ * @param {string} message - A mensagem a ser registrada.
+ */
+function log(type, message) {
+  console.log(`[${type}] - ${message}`);
 }
 
 export {
@@ -86,4 +105,5 @@ export {
   isBetStatusValid,
   roundToTwoDecimalPlaces,
   sleep,
+  log,
 };

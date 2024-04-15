@@ -1,5 +1,5 @@
 import { Chart } from "./chart.js";
-import { getRandomNumber } from "../utils.js";
+import { getRandomNumber, log } from "../utils.js";
 
 export class Round {
   // #roundLoadingTimeMS = 0;
@@ -54,29 +54,23 @@ export class Round {
     if (probability < 0.6) {
       // 60% da partida durar até 10 segundos
       gameDuration = getRandomNumber(10) * ONE_SECOND;
-      console.log(
-        `[info] - 60% de chance! - a partida pode durar até 10 segundos`
-      );
+      log("info", "60% de chance! - a partida pode durar até 10 segundos");
     } else if (probability < 0.9) {
       // 30% da partida durar até 50 segundos
       gameDuration = getRandomNumber(50) * ONE_SECOND;
-      console.log(
-        `[info] - 30% de chance! - a partida pode durar até 50 segundos`
-      );
+      log("info", "30% de chance! - a partida pode durar até 50 segundos");
     } else {
       // 10% da partida durar até 300 segundos
       gameDuration = getRandomNumber(300) * ONE_SECOND;
-      console.log(
-        `[info] - 10% de chance! - a partida pode durar até 300 segundos`
-      );
+      log("info", "10% de chance! - a partida pode durar até 300 segundos");
     }
 
     // gameDuration = 2000;
-    console.log(
-      `[start] - Essa partida durará ${(gameDuration / 1000).toFixed(
-        2
-      )} segundos.`
+    log(
+      "start",
+      `Essa partida durará ${(gameDuration / 1000).toFixed(2)} segundos.`
     );
+
     return gameDuration;
   }
 
@@ -112,7 +106,7 @@ export class Round {
 
   startNewRound() {
     this.#countToAdd = getRandomNumber(0.1) + 0.05; // min: 0.06, max: 0.15
-    console.log(`[info] - O contador pode aumentar em até ${this.#countToAdd}`);
+    log("info", `O contador pode aumentar em até ${this.#countToAdd}`);
 
     this.#isGameEnded = false;
     this.#isGameStarted = true;
