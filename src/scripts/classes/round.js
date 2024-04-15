@@ -41,8 +41,6 @@ export class Round {
 
   constructor(chart) {
     this.#chart = chart;
-    this.#countToAdd = getRandomNumber(0.1) + 0.05; // min: 0.06, max: 0.15
-    console.log(`[info] - O contador pode aumentar em até ${this.#countToAdd}`);
     this.#imageMarkerAviatorEl = document.getElementById("aviator");
   }
 
@@ -72,7 +70,8 @@ export class Round {
         `[info] - 10% de chance! - a partida pode durar até 300 segundos`
       );
     }
-    // gameDuration = 10000;
+
+    // gameDuration = 2000;
     console.log(
       `[start] - Essa partida durará ${(gameDuration / 1000).toFixed(
         2
@@ -93,7 +92,6 @@ export class Round {
     // limpar os temporizadores
     clearTimeout(timeoutId);
     clearInterval(intervalId);
-    this.#chart.clearChartDps();
     this.#chart.shouldUpdateMarkerPositionAfterResize = false;
     this.#isGameStarted = false;
     this.#isGameEnded = true;
@@ -102,10 +100,20 @@ export class Round {
   loadingNewRound() {
     this.#chart.setSubtitleText("Faça sua aposta!");
     this.#chart.setTitleText("A partida começará em instantes!");
+    this.#chart.setTitleFontColor("white");
     this.#chart.setTitleFontSize(40);
   }
 
+  awaitNewRound() {
+    this.loadingNewRound();
+    this.#chart.clearChartDps();
+    this.#chart.render();
+  }
+
   startNewRound() {
+    this.#countToAdd = getRandomNumber(0.1) + 0.05; // min: 0.06, max: 0.15
+    console.log(`[info] - O contador pode aumentar em até ${this.#countToAdd}`);
+
     this.#isGameEnded = false;
     this.#isGameStarted = true;
     this.#multiplierCount = 1;

@@ -70,6 +70,13 @@ function isBetStatusValid(betStatus) {
   return VALID_BET_STATUS.includes(betStatus);
 }
 
+async function sleep(ms) {
+  console.log(
+    `[time] - Esperando ${parseFloat(ms / 1000).toFixed(2)} segundos`
+  );
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export {
   formatDateToBrazilianFormat,
   getRandomNumber,
@@ -78,4 +85,5 @@ export {
   elementExists,
   isBetStatusValid,
   roundToTwoDecimalPlaces,
+  sleep,
 };

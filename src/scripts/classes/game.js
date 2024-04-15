@@ -29,4 +29,9 @@ export class Game {
     this.#player.loadMoneyFromStorage();
     this.#player.updateMoneyOnInterface();
   }
+
+  async init(gameFunction) {
+    await gameFunction();
+    await this.init(gameFunction);
+  }
 }

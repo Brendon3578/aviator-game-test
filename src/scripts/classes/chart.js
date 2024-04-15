@@ -95,6 +95,12 @@ export class Chart {
   }
 
   clearChartDps() {
+    this.chartInterface.options.data[0].dataPoints = [];
     this.dps = [];
+    this.chartInterface.options.data[0].dataPoints = this.dps;
+    this.xVal = 0;
+    this.yVal = 0;
+    // TODO: fazer o jogo ser infinito
+    // this.chartInterface.render();
   }
 }

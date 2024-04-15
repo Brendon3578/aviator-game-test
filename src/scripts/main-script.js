@@ -8,6 +8,7 @@ import {
   isBetStatusValid,
   isBoolean,
   showAlert,
+  sleep,
 } from "./utils.js";
 
 // ------------------------------------[ SCRIPT DA PARTIDA ]------------------------------------
@@ -26,7 +27,9 @@ game.build();
 // -- Pegar todos os fieldset
 const allFieldsetEls = document.querySelectorAll("fieldset[data-bet-status]");
 
-setTimeout(() => {
+async function mainGame() {
+  await sleep(round.loadingTime);
+
   const { roundDuration } = round.startNewRound();
 
   // ----- Desabilitar os fieldset e botões que não houveram aposta
@@ -80,8 +83,21 @@ setTimeout(() => {
 
       showAlert(`Você perdeu ${lostMoney.toFixed(2)}!`);
     });
+
+    setTimeout(() => {
+      allFieldsetEls.forEach((fieldset) => {
+        disableFieldsetAndBetButton(fieldset, false);
+      });
+      round.awaitNewRound();
+    }, round.loadingTime);
   }, roundDuration);
-}, round.loadingTime);
+
+  await sleep(roundDuration + round.loadingTime);
+}
+
+game.init(mainGame);
+
+// setTimeout(mainGame, round.loadingTime);
 
 // ------------------------------------[ SCRIPT DOS BOTÕES DE ADICIONAR MAIS DINHEIRO NO INPUT ]------------------------------------
 function updateBetValue(valueToAdd, inputBetEl) {
@@ -221,18 +237,21 @@ function setFieldsetDisabled(fieldsetElement, boolean) {
   }
 }
 
-function disableFieldsetAndBetButton(fieldsetElement) {
+function disableFieldsetAndBetButton(fieldsetElement, boolean = true) {
   if (elementExists(fieldsetElement) == false)
     throw new Error(`Fieldset element don't exists! - ${fieldsetElement}`);
+
+  if (isBoolean(boolean) == false)
+    throw new Error("Not a valid boolean value to disable or enable button!");
 
   let buttonToDisable = fieldsetElement.querySelector("[data-bet-button]");
 
   if (elementExists(buttonToDisable) == false)
     throw new Error(`Bet button element don't exists! - ${buttonToDisable}`);
 
-  setFieldsetDisabled(fieldsetElement, true);
+  setFieldsetDisabled(fieldsetElement, boolean);
 
-  setBetButtonDisabled(buttonToDisable, true);
+  setBetButtonDisabled(buttonToDisable, boolean);
 }
 
 function setBetButtonDisabled(betButtonElement, boolean) {
