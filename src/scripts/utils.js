@@ -22,14 +22,14 @@ function formatDateToBrazilianFormat(date) {
 
 /**
  * Verifica se o valor fornecido é do tipo booleano.
- * @param {*} b - O valor a ser verificado.
+ * @param {any} b - O valor a ser verificado.
  * @returns {boolean} Retorna true se o valor fornecido for do tipo booleano, caso contrário, retorna false.
  */
 const isBoolean = (b) => (typeof b == "boolean" ? true : false);
 
 /**
  * Verifica se um elemento existe, ou seja, se não é nulo ou indefinido.
- * @param {*} el - O elemento a ser verificado.
+ * @param {HTMLElement | null} el - O elemento a ser verificado.
  * @returns {boolean} Retorna true se o elemento existir (não for nulo ou indefinido), caso contrário, retorna false.
  */
 const elementExists = (el) => el != null;
@@ -87,13 +87,27 @@ async function sleep(ms) {
  * @typedef {("info"|"alert"|"sleep"|"storage"|"start"|"round")} ActionType
  */
 
+const LOG_COLORS = {
+  info: "#3498db", // azul
+  alert: "#e67e22", // laranja
+  sleep: "#b07cc6", // roxo
+  storage: "#2ecc71", // verde
+  start: "#f1c40f", // amarelo
+};
+
 /**
  * Função utilitária apenas para mostrar a mensagem no console.
  * @param {ActionType} type - O tipo da mensagem.
  * @param {string} message - A mensagem a ser registrada.
  */
 function log(type, message) {
-  console.log(`[${type}] - ${message}`);
+  const color = LOG_COLORS[type] || "#6789ab"; // cor padrão é cinza
+  console.log(
+    `%c[${type}]`,
+    `color: ${color}; background-color: #111; padding: 2px; border-radius: 2px;`,
+    `- ${message}`
+  );
+  // console.log(`[${type}] - ${message}`);
 }
 
 export {
