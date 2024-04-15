@@ -52,13 +52,14 @@
         <div class="flex gap-2 items-center justify-center">
           <button
             class="bg-secondary flex py-0.5 px-3 items-center gap-1 justify-center rounded-full"
+            title="Clique aqui para saber como jogar o jogo"
           >
             <!-- prettier-ignore -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
               <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0ZM8.94 6.94a.75.75 0 1 1-1.061-1.061 3 3 0 1 1 2.871 5.026v.345a.75.75 0 0 1-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 1 0 8.94 6.94ZM10 15a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
             </svg>
 
-            Como jogar?
+            <span class="hidden sm:inline-block"> Como jogar? </span>
           </button>
           <!-- Saldo do usuário -->
           <div
@@ -108,7 +109,7 @@
           </div>
           <!-- game interface -->
           <div
-            class="overflow-hidden bg-gray-950 border-gray-700 border rounded-3xl py-4 p-8 min-h-96 w-full text-white flex items-center justify-center flex-col gap-2"
+            class="overflow-hidden bg-gray-950 border-gray-700 border rounded-3xl py-2 px-4 sm:py-4 sm:px-8 min-h-96 w-full text-white flex items-center justify-center flex-col gap-2"
           >
             <!-- BIBLIOTECA DO CANVAS JS -->
             <div
@@ -124,8 +125,13 @@
             <fieldset
               data-bet-status="bet"
               id="bet-fieldset-1"
-              class="group p-3 flex flex-col gap-3 justify-center items-center w-full text-white bg-gray-800 border border-gray-700 rounded-xl"
+              class="group p-3 flex flex-col gap-4 justify-center items-center w-full text-white bg-gray-800 border border-gray-700 rounded-xl"
             >
+              <!-- foi mudado o p-3 para o p4 -->
+              <div class="text-gray-400 text-sm">
+                <p>Faça a sua aposta abaixo</p>
+              </div>
+              <!-- 
               <div
                 class="text-xs bg-gray-900 border border-gray-700 rounded-full w-min flex group-disabled:opacity-50"
               >
@@ -153,12 +159,12 @@
                     class="hidden"
                   />
                 </label>
-              </div>
+              </div> -->
 
               <!-- bet button and counter -->
-              <div class="flex gap-8">
+              <div class="flex gap-8 flex-col-reverse sm:flex-row items-center">
                 <div
-                  class="grid grid-cols-2 gap-1 w-40 group-disabled:opacity-50"
+                  class="grid grid-cols-2 gap-1 w-full sm:w-40 group-disabled:opacity-50"
                 >
                   <label
                     class="flex items-center justify-center w-full col-span-2 bg-gray-950 rounded-full border border-gray-700"
@@ -256,9 +262,12 @@
             <fieldset
               data-bet-status="bet"
               id="bet-fieldset-2"
-              class="group p-3 flex flex-col gap-3 justify-center items-center w-full text-white bg-gray-800 border border-gray-700 rounded-xl"
+              class="group p-3 flex flex-col gap-4 justify-center items-center w-full text-white bg-gray-800 border border-gray-700 rounded-xl"
             >
-              <div
+              <div class="text-gray-400 text-sm">
+                <p>Faça a sua aposta abaixo</p>
+              </div>
+              <!-- <div
                 class="text-xs bg-gray-900 border border-gray-700 rounded-full w-min flex group-disabled:opacity-50"
               >
                 <label
@@ -285,12 +294,12 @@
                     class="hidden"
                   />
                 </label>
-              </div>
+              </div> -->
 
               <!-- bet button and counter -->
-              <div class="flex gap-8">
+              <div class="flex gap-8 flex-col-reverse sm:flex-row items-center">
                 <div
-                  class="grid grid-cols-2 gap-1 w-40 group-disabled:opacity-50"
+                  class="grid grid-cols-2 gap-1 sm:w-40 w-full group-disabled:opacity-50"
                 >
                   <label
                     class="flex items-center justify-center w-full col-span-2 bg-gray-950 rounded-full border border-gray-700"

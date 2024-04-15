@@ -99,6 +99,7 @@ async function mainGame() {
   await sleep(roundDuration + round.loadingTime);
 }
 
+// Executa o jogo em um Loop infinito
 game.init(mainGame);
 
 // setTimeout(mainGame, round.loadingTime);
