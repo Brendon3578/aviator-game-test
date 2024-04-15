@@ -2,9 +2,9 @@ import { Chart } from "./chart.js";
 import { getRandomNumber, log } from "../utils.js";
 
 export class Round {
-  // #roundLoadingTimeMS = 0;
-  #roundLoadingTimeMS = 10000;
-  #updateChartIntervalTimeMS = 125;
+  // #ROUND_LOADING_TIME_MS = 0;
+  #ROUND_LOADING_TIME_MS = 10000;
+  #UPDATE_CHART_INTERVAL_TIME_MS = 125;
   #countToAdd;
   /**
    * @typedef {import('./chart.js').Chart} Chart
@@ -32,11 +32,11 @@ export class Round {
   }
 
   get loadingTime() {
-    return this.#roundLoadingTimeMS;
+    return this.#ROUND_LOADING_TIME_MS;
   }
 
   get intervalTime() {
-    return this.#updateChartIntervalTimeMS;
+    return this.#UPDATE_CHART_INTERVAL_TIME_MS;
   }
 
   constructor(chart) {
@@ -46,7 +46,7 @@ export class Round {
 
   #generateRoundDuration() {
     // máximo de segundos que a partida irá acontecer
-    const ONE_SECOND = 1000;
+    const ONE_SECOND_MS = 1000;
     const probability = getRandomNumber(1);
     let gameDuration = 0;
     let message = "";
@@ -78,7 +78,7 @@ export class Round {
     );
 
     // Calcular a duração aleatória dentro do intervalo selecionado
-    gameDuration = getRandomNumber(selectedRange.maxDuration) * ONE_SECOND;
+    gameDuration = getRandomNumber(selectedRange.maxDuration) * ONE_SECOND_MS;
     message = selectedRange.message;
 
     log("round", message);
@@ -159,7 +159,7 @@ export class Round {
       this.#multiplierCount += getRandomNumber(this.#countToAdd);
       this.#chart.setTitleText(`${this.#multiplierCount.toFixed(2)}x`);
       this.#chart.updateChart();
-    }, this.#updateChartIntervalTimeMS);
+    }, this.#UPDATE_CHART_INTERVAL_TIME_MS);
     return intervalId;
   }
 }
