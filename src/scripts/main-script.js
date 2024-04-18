@@ -27,6 +27,7 @@ game.build();
 // -- Pegar todos os fieldset
 const allFieldsetEls = document.querySelectorAll("fieldset[data-bet-status]");
 
+// -- Função principal do jogo
 async function mainGame() {
   await sleep(round.loadingTime);
 
@@ -105,14 +106,32 @@ game.init(mainGame);
 // setTimeout(mainGame, round.loadingTime);
 
 // ------------------------------------[ SCRIPT DOS BOTÕES DE ADICIONAR MAIS DINHEIRO NO INPUT ]------------------------------------
+/**
+ * Verifica se o valor é válido para uma aposta.
+ * Um valor é considerado válido se for um número e maior ou igual a 1.
+ *
+ * @param {number} value - O valor da aposta  ser verificado.
+ * @returns {boolean} Retorna verdadeiro se o valor for válido para apostar, caso contrário, falso.
+ *
+ * @example
+ * // Retorna true
+ * isValidValueToBet(5);
+ *
+ * // Retorna false
+ * isValidValueToBet(0);
+ */
 function isValidValueToBet(value) {
-  return isNaN(value) == false && value > 0.01;
+  return isNaN(value) == false && value >= Game.RULES.MINIMUM_VALUE_TO_BET;
 }
 
 function updateBetValue(valueToAdd, inputBetEl) {
   let newValue = parseFloat(inputBetEl.value) + parseInt(valueToAdd);
   if (isValidValueToBet(newValue) == false) {
-    newValue = 1;
+    showAlert(
+      `O valor mínimo para aposta é ${Game.RULES.MINIMUM_VALUE_TO_BET}.`
+    );
+
+    newValue = Game.RULES.MINIMUM_VALUE_TO_BET;
   }
   inputBetEl.value = newValue;
 }
@@ -135,6 +154,7 @@ updateBetButtons.forEach((button) => {
 function getBetValueFromInput(fieldsetEl) {
   let input = fieldsetEl.querySelector("[data-bet-value]");
   let betValue = parseFloat(input.value).toFixed(2);
+
   input.value = betValue;
   return parseFloat(betValue);
 }
@@ -168,9 +188,17 @@ betButtonsEls.forEach((button) => {
 
     switch (betStatus) {
       case "bet":
+        // -- Verificar se o player não possui fatecoins suficientes
         if (player.hasEnoughMoney(bet) == false) {
-          // -- Verificar se o player não possui fatecoins suficientes
           showAlert("Você não possui esse dinheiro!");
+          break;
+        }
+
+        // -- Verificar se o valor da aposta é válido
+        if (isValidValueToBet(bet) == false) {
+          showAlert(
+            `O valor mínimo para aposta é ${game.RULES.MINIMUM_VALUE_TO_BET}.`
+          );
           break;
         }
 
@@ -260,7 +288,6 @@ function disableFieldsetAndBetButton(fieldsetElement, boolean = true) {
     throw new Error(`Bet button element don't exists! - ${buttonToDisable}`);
 
   setFieldsetDisabled(fieldsetElement, boolean);
-
   setBetButtonDisabled(buttonToDisable, boolean);
 }
 

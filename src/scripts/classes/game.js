@@ -8,6 +8,33 @@ import { Player } from "./player.js";
  */
 export class Game {
   /**
+   * Regras gerais ddo jogo
+   */
+  static RULES = {
+    MINIMUM_VALUE_TO_BET: 1,
+    GAME_PROBABILITY: [
+      {
+        probability: 0.7,
+        maxDuration: 10,
+        logMessage: "70% - a partida pode durar até 10 segundos",
+        minimumNumberToAddCounter: 0.01,
+      },
+      {
+        probability: 0.95,
+        maxDuration: 50,
+        logMessage: "25% - a partida pode durar até 50 segundos",
+        minimumNumberToAddCounter: 0.05,
+      },
+      {
+        probability: 1,
+        maxDuration: 250,
+        logMessage: "5% - a partida pode durar até 250 segundos",
+        minimumNumberToAddCounter: 0.15,
+      },
+    ],
+  };
+
+  /**
    * Instância do jogador.
    * @type {Player}
    * @private

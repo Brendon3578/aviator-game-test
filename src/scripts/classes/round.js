@@ -1,5 +1,6 @@
 import { Chart } from "./chart.js";
 import { getRandomNumber, log } from "../utils.js";
+import { Game } from "./game.js";
 
 export class Round {
   // #ROUND_LOADING_TIME_MS = 0;
@@ -44,31 +45,14 @@ export class Round {
     this.#imageMarkerAviatorEl = document.getElementById("aviator");
   }
 
-  #generateRoundDuration() {
+  #generateRoundDurationAndNumberToAddCounter() {
     // máximo de segundos que a partida irá acontecer
     const ONE_SECOND_MS = 1000;
     const probability = getRandomNumber(1);
-    let gameDuration = 0;
     let message = "";
 
     // Mapeamento de probabilidades para intervalos de duração
-    const durationRanges = [
-      {
-        probability: 0.6,
-        maxDuration: 10,
-        message: "60% - a partida pode durar até 10 segundos",
-      },
-      {
-        probability: 0.9,
-        maxDuration: 50,
-        message: "30% - a partida pode durar até 50 segundos",
-      },
-      {
-        probability: 1,
-        maxDuration: 300,
-        message: "10% - a partida pode durar até 300 segundos",
-      },
-    ];
+    const durationRanges = Game.RULES.GAME_PROBABILITY;
 
     // Encontrar o intervalo correspondente à probabilidade gerada
     // exemplo: 0.8 de probability
@@ -78,18 +62,22 @@ export class Round {
     );
 
     // Calcular a duração aleatória dentro do intervalo selecionado
-    gameDuration =
+    let roundDuration =
       getRandomNumber(selectedRange.maxDuration) * ONE_SECOND_MS +
       ONE_SECOND_MS;
-    message = selectedRange.message;
+    message = selectedRange.logMessage;
+    let minimumNumberToAddCounter = selectedRange.minimumNumberToAddCounter;
 
     log("round", message);
     log(
       "start",
-      `Essa partida durará ${(gameDuration / 1000).toFixed(2)} segundos.`
+      `Essa partida durará ${(roundDuration / 1000).toFixed(2)} segundos.`
     );
 
-    return gameDuration;
+    return {
+      roundDuration: roundDuration,
+      minimumNumberToAddCounter: minimumNumberToAddCounter,
+    };
   }
 
   finishRound(timeoutId, intervalId) {
@@ -123,7 +111,10 @@ export class Round {
   }
 
   startNewRound() {
-    this.#countToAdd = getRandomNumber(0.2) + 0.05; // min: 0.06, max: 0.25
+    const { roundDuration, minimumNumberToAddCounter } =
+      this.#generateRoundDurationAndNumberToAddCounter();
+    this.#countToAdd = getRandomNumber(0.05) + minimumNumberToAddCounter; // mínimo pode ser 0.01, o máximo pode 0.2
+
     log("info", `O contador pode aumentar em até ${this.#countToAdd}`);
 
     this.#isGameEnded = false;
@@ -140,9 +131,6 @@ export class Round {
 
     // Esse algoritmo irá atualizar o gráfico constantemente (a cada 0.125 ms) e o multiplicador
     const intervalId = this.#createIntervalToUpdateChart();
-
-    // ou definir como 10000 -> 10 segundos
-    const roundDuration = this.#generateRoundDuration();
 
     const timeoutId = setTimeout(() => {
       clearInterval(intervalId);
