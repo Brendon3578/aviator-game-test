@@ -55,7 +55,11 @@ function roundToTwoDecimalPlaces(number) {
   return Math.round(number * 100) / 100;
 }
 
-function showAlert(message, isError = false) {
+/**
+ * Exibe um alerta na janela do navegador para o usuário com uma mensagem e registra no log de desenvolvedor.
+ * @param {string} message A mensagem a ser exibida no alerta.
+ */
+function showAlert(message) {
   log("alert", message);
   window.alert(message);
 }
@@ -96,7 +100,7 @@ const LOG_COLORS = {
 };
 
 /**
- * Função utilitária apenas para mostrar a mensagem no console.
+ * Função utilitária apenas para mostrar a mensagem no console de desenvolvedor.
  * @param {ActionType} type - O tipo da mensagem.
  * @param {string} message - A mensagem a ser registrada.
  */
