@@ -109,7 +109,7 @@ async function mainGame() {
       showAlert(`Você perdeu ${lostMoney.toFixed(2)}!`);
     });
 
-    // Mostrar tela de carregamento (a partida já vai começar)
+    // -- Mostrar tela de carregamento (A partida começará em instantes!)
     setTimeout(() => {
       allFieldsetEls.forEach((fieldset) => {
         disableFieldsetAndBetButton(fieldset, false);

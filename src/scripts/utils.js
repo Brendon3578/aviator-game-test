@@ -105,7 +105,7 @@ const LOG_COLORS = {
  * @param {string} message - A mensagem a ser registrada.
  */
 function log(type, message) {
-  const color = LOG_COLORS[type] || "#6789ab"; // cor padrão é cinza
+  const color = LOG_COLORS[type] ?? "#6789ab"; // cor padrão é cinza
   console.log(
     `%c[${type}]`,
     `color: ${color}; background-color: #111; padding: 2px; border-radius: 2px;`,

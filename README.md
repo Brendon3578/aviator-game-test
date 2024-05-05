@@ -1,4 +1,4 @@
-# Aviator Game (Jogo do aviãozinho)
+# Aviator Game (Jogo do Aviãozinho) ✈
 
 Este é um projeto baseado no famoso jogo de aposta Aviator.
 
