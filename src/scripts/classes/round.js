@@ -4,7 +4,7 @@ import { Game } from "./game.js";
 
 export class Round {
   // #ROUND_LOADING_TIME_MS = 0;
-  #ROUND_LOADING_TIME_MS = 10000;
+  #ROUND_LOADING_TIME_MS = 15000;
   #UPDATE_CHART_INTERVAL_TIME_MS = 125;
   #countToAdd;
   /**
@@ -58,7 +58,7 @@ export class Round {
     // exemplo: 0.8 de probability
     // 0.8 < 0.6? -> vai pro próximo (0.8 < 0.8) -> cai aqui
     const selectedRange = durationRanges.find(
-      (range) => probability < range.probability
+      (range) => probability <= range.probability
     );
 
     // Calcular a duração aleatória dentro do intervalo selecionado
@@ -82,10 +82,12 @@ export class Round {
 
   finishRound(timeoutId, intervalId) {
     // this.#imageMarkerAviatorEl.style.display = "none";
-    this.#imageMarkerAviatorEl.classList.add("fly-away");
-    this.#imageMarkerAviatorEl.style.top = "0px";
-    // console.log(window.screen.width);
-    this.#imageMarkerAviatorEl.style.left = `${window.screen.width}px`;
+    setTimeout(() => {
+      this.#imageMarkerAviatorEl.classList.add("fly-away");
+      this.#imageMarkerAviatorEl.style.top = "0px";
+      // console.log(window.screen.width);
+      this.#imageMarkerAviatorEl.style.left = `${window.screen.width}px`;
+    }, 100);
     this.#chart.setTitleFontColor("#dc2626"); // red 600
     this.#chart.setSubtitleText("Voou para longe!");
 
@@ -98,10 +100,10 @@ export class Round {
   }
 
   loadingNewRound() {
-    this.#chart.setSubtitleText("Faça sua aposta!");
-    this.#chart.setTitleText("A partida começará em instantes!");
+    this.#chart.setSubtitleText("A partida começará em instantes!");
+    this.#chart.setTitleText("Faça sua aposta!");
     this.#chart.setTitleFontColor("white");
-    this.#chart.setTitleFontSize(40);
+    this.#chart.setTitleFontSize(64);
   }
 
   awaitNewRound() {
@@ -130,7 +132,7 @@ export class Round {
     this.#imageMarkerAviatorEl.classList.remove("fly-away");
 
     // Esse algoritmo irá atualizar o gráfico constantemente (a cada 0.125 ms) e o multiplicador
-    const intervalId = this.#createIntervalToUpdateChart();
+    const intervalId = this.#createIntervalToUpdateChart(this.#countToAdd);
 
     const timeoutId = setTimeout(() => {
       clearInterval(intervalId);
@@ -144,11 +146,11 @@ export class Round {
     return { roundDuration };
   }
 
-  #createIntervalToUpdateChart() {
+  #createIntervalToUpdateChart(valueToAddInXAxis) {
     const intervalId = setInterval(() => {
       this.#multiplierCount += getRandomNumber(this.#countToAdd);
       this.#chart.setTitleText(`${this.#multiplierCount.toFixed(2)}x`);
-      this.#chart.updateChart();
+      this.#chart.updateChart(valueToAddInXAxis);
     }, this.#UPDATE_CHART_INTERVAL_TIME_MS);
     return intervalId;
   }

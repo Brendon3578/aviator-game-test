@@ -4,6 +4,7 @@ import { RoundsHistory } from "./classes/roundsHistory.js";
 import { Player } from "./classes/player.js";
 import { Round } from "./classes/round.js";
 import {
+  BET_HINT_MESSAGES,
   elementExists,
   isBetStatusValid,
   isBoolean,
@@ -26,10 +27,12 @@ game.build();
 // ------------------ [ COMEÇO DA PARTIDA ] ------------------
 // -- Pegar todos os fieldset
 const allFieldsetEls = document.querySelectorAll("fieldset[data-bet-status]");
+let isAllFieldsetDisabled = false;
 
 // -- Função principal do jogo
 async function mainGame() {
   await sleep(round.loadingTime);
+  isAllFieldsetDisabled = false;
 
   const { roundDuration } = round.startNewRound();
 
@@ -40,9 +43,23 @@ async function mainGame() {
   player.playersBets.forEach((bet) => {
     // -- Desabilitar todos os fieldset para não haver alteração na aposta feita
     allFieldsetEls.forEach((fieldset) => {
-      setFieldsetDisabled(fieldset, true);
+      if (isAllFieldsetDisabled == false) {
+        setFieldsetDisabled(fieldset, true);
+
+        const betHintTextEl = fieldset.querySelector("[data-bet-hint]");
+        setBetHintStatusText(
+          betHintTextEl,
+          BET_HINT_MESSAGES.awaitNewRoundWhenNotBetted
+        );
+        isAllFieldsetDisabled = true;
+      }
     });
+
     const bettedFieldsetEl = document.getElementById(`bet-fieldset-${bet.id}`);
+    const betHintTextEl = bettedFieldsetEl.querySelector("[data-bet-hint]");
+
+    setBetHintStatusText(betHintTextEl, BET_HINT_MESSAGES.cashOut);
+
     const numberButtonTextEl = bettedFieldsetEl.querySelector(
       "[data-bet-text-value]"
     );
@@ -74,6 +91,9 @@ async function mainGame() {
       disableFieldsetAndBetButton(fieldset);
 
       const buttonTextEl = fieldset.querySelector("[data-bet-button-text]");
+      const betHintTextEl = fieldset.querySelector("[data-bet-hint]");
+      setBetHintStatusText(betHintTextEl, BET_HINT_MESSAGES.roundIsOver);
+
       setBetButtonStatusText(buttonTextEl, "Bet");
       changeBetFieldsetStatus(fieldset, "bet");
     });
@@ -89,9 +109,13 @@ async function mainGame() {
       showAlert(`Você perdeu ${lostMoney.toFixed(2)}!`);
     });
 
+    // Mostrar tela de carregamento (a partida já vai começar)
     setTimeout(() => {
       allFieldsetEls.forEach((fieldset) => {
         disableFieldsetAndBetButton(fieldset, false);
+        const betHintTextEl = fieldset.querySelector("[data-bet-hint]");
+
+        setBetHintStatusText(betHintTextEl, BET_HINT_MESSAGES.userCanBet);
       });
       round.awaitNewRound();
     }, round.loadingTime);
@@ -168,6 +192,7 @@ betButtonsEls.forEach((button) => {
   const betValueButtonTextEl = button.querySelector("[data-bet-text-value]");
   const buttonTextEl = button.querySelector("[data-bet-button-text]");
   const selectedFieldsetEl = document.getElementById(`bet-fieldset-${betId}`);
+  const betHintTextEl = selectedFieldsetEl.querySelector("[data-bet-hint]");
 
   // -- Verificar se o atributo data-bet-button está definido dentro do button
   if (!betId) throw new Error("button dataset attribute don't defined!");
@@ -204,6 +229,7 @@ betButtonsEls.forEach((button) => {
 
         player.setBetValue(betId, bet);
         player.loseMoney(bet);
+        setBetHintStatusText(betHintTextEl, BET_HINT_MESSAGES.awaitRoundStart);
 
         // -- Mudança no HTML
         changeBetFieldsetStatus(selectedFieldsetEl, "cancel");
@@ -216,6 +242,8 @@ betButtonsEls.forEach((button) => {
         player.winMoney(bet);
 
         // -- Mudança no HTML
+        setBetHintStatusText(betHintTextEl, BET_HINT_MESSAGES.userCanBet);
+
         changeBetFieldsetStatus(selectedFieldsetEl, "bet");
         setFieldsetDisabled(selectedFieldsetEl, false);
         setBetButtonStatusText(buttonTextEl, "Bet");
@@ -224,6 +252,10 @@ betButtonsEls.forEach((button) => {
       case "cash-out":
         if (round.isGameEnded == false) {
           player.winBet(betId);
+          setBetHintStatusText(
+            betHintTextEl,
+            BET_HINT_MESSAGES.awaitNewRoundWhenCashOut
+          );
 
           let winMoney = player.getBetValue(betId) * round.multiplierCount;
           player.winMoney(winMoney);
@@ -306,6 +338,9 @@ function disableAllNotBettedFieldsetsAndButtons() {
   );
   fieldsetNotBettedEls.forEach((fieldset) => {
     disableFieldsetAndBetButton(fieldset);
+    const betHintTextEl = fieldset.querySelector("[data-bet-hint]");
+
+    setBetHintStatusText(betHintTextEl, BET_HINT_MESSAGES.awaitNewRound);
   });
 }
 
@@ -326,3 +361,10 @@ const clearRoundHistoryBtnEl = document.getElementById("clear-last-rounds");
 clearRoundHistoryBtnEl.addEventListener("click", () => {
   lastRoundsHistory.clearRoundHistory();
 });
+
+function setBetHintStatusText(betHintTextEl, message) {
+  if (elementExists(betHintTextEl) == false)
+    throw new Error(`Bet hint element don't exists! - ${betHintTextEl}`);
+
+  betHintTextEl.innerText = message;
+}

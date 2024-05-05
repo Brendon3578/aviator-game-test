@@ -115,16 +115,22 @@ export class Chart {
   /**
    * Atualiza o gráfico em tempo real.
    */
-  updateChart() {
-    this.#yVal = this.#xVal ** 2; // Gráfico exponencial
+  updateChart(valueToAddInXAxis) {
+    // this.#yVal = this.#xVal ** 2; // Gráfico exponencial
 
+    this.#yVal =
+      Math.sin(this.#xVal * 0.5) +
+      this.#xVal * 0.6 +
+      this.#xVal * valueToAddInXAxis;
+
+    // sin(x*0.1)
     // #yVal = Math.log(#xVal + 1) + Math.sin(#xVal * randomNumberToSumYAxis);
     // #yVal = Math.log(#xVal + 1); // gráfico de log10() sem aparecer o número negativo
     // this.#yVal = Math.sin(this.#xVal) + this.#xVal; // gráfico de ondulação + crescente
     this.dps.push({ x: this.#xVal, y: this.#yVal });
     this.#xVal++;
     this.#chartInterface.render();
-    this.#chartInterface.axisY[0].set("maximum", this.#yVal + 1);
+    this.#chartInterface.axisY[0].set("maximum", this.#xVal + 20);
     this.updateMarkerPosition(
       this.#chartInterface.options.data[0].dataPoints.length - 1
     );
