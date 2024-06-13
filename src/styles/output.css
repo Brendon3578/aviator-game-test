@@ -615,6 +615,10 @@ video {
   margin-bottom: 6rem;
 }
 
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
 .block {
   display: block;
 }
@@ -635,6 +639,16 @@ video {
   display: none;
 }
 
+.size-12 {
+  width: 3rem;
+  height: 3rem;
+}
+
+.size-6 {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .h-12 {
   height: 3rem;
 }
@@ -653,10 +667,6 @@ video {
 
 .h-5 {
   height: 1.25rem;
-}
-
-.h-6 {
-  height: 1.5rem;
 }
 
 .min-h-96 {
@@ -691,10 +701,6 @@ video {
   width: 13rem;
 }
 
-.w-6 {
-  width: 1.5rem;
-}
-
 .w-8 {
   width: 2rem;
 }
@@ -706,6 +712,14 @@ video {
 .w-min {
   width: -moz-min-content;
   width: min-content;
+}
+
+.min-w-12 {
+  min-width: 3rem;
+}
+
+.min-w-6 {
+  min-width: 1.5rem;
 }
 
 .max-w-4xl {
@@ -1332,23 +1346,28 @@ fieldset[data-bet-status="cash-out"] .cash-out-value-txt {
     padding: 0.5rem;
   }
 
-  .sm\:px-20 {
-    padding-left: 5rem;
-    padding-right: 5rem;
+  .sm\:px-14 {
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
   }
 
   .sm\:py-4 {
     padding-top: 1rem;
     padding-bottom: 1rem;
   }
+}
 
-  .sm\:px-14 {
-    padding-left: 3.5rem;
-    padding-right: 3.5rem;
+@media (min-width: 768px) {
+  .md\:inline-block {
+    display: inline-block;
   }
 }
 
 @media (min-width: 1024px) {
+  .lg\:inline-block {
+    display: inline-block;
+  }
+
   .lg\:flex-row {
     flex-direction: row;
   }
